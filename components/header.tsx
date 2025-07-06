@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ThemeToggle } from './theme-toggle'
 import { Sparkles, Menu, X, Home, FileText, User } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 
 const navItems = [
@@ -16,6 +16,9 @@ const navItems = [
 export function Header() {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
+  const [isScrolled, setIsScrolled] = useState(false)
 
   const isActive = (href: string) => {
     if (href === '/') {
@@ -24,35 +27,75 @@ export function Header() {
     return pathname.startsWith(href)
   }
 
+  useEffect(() => {
+    const controlNavbar = () => {
+      const currentScrollY = window.scrollY
+      
+      // Track if page is scrolled for background effect
+      setIsScrolled(currentScrollY > 50)
+      
+      // Show header when at top of page
+      if (currentScrollY < 10) {
+        setIsVisible(true)
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Scrolling down & past 100px
+        setIsVisible(false)
+      } else if (currentScrollY < lastScrollY) {
+        // Scrolling up
+        setIsVisible(true)
+      }
+      
+      setLastScrollY(currentScrollY)
+    }
+
+    window.addEventListener('scroll', controlNavbar)
+    return () => window.removeEventListener('scroll', controlNavbar)
+  }, [lastScrollY])
+
   return (
-    <header className="sticky top-0 z-50 w-full flex items-center justify-center pt-4 px-4">
+    <header className={cn(
+      "fixed top-0 z-50 w-full", // Fixed positioning
+      "flex items-center justify-center", // Layout
+      "pt-4 px-4", // Padding
+      "transition-transform duration-300 ease-in-out", // Smooth animation
+      isVisible ? "translate-y-0" : "-translate-y-full" // Hide/show based on scroll
+    )}>
       {/* Dynamic Island Style Navigation Container */}
       <div className="relative">
         {/* Glow effect */}
         <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 rounded-full blur-xl opacity-60" />
         
         {/* Main navigation pill */}
-        <div className="relative bg-background/70 backdrop-blur-2xl border border-border/30 rounded-full shadow-2xl shadow-black/20 dark:shadow-black/40 supports-[backdrop-filter]:bg-background/60">
+        <div className={cn(
+          "relative rounded-full shadow-2xl border transition-all duration-300", // Base styles
+          "backdrop-blur-2xl supports-[backdrop-filter]:bg-background/60", // Backdrop blur
+          isScrolled 
+            ? "bg-background/90 border-border/50 shadow-black/30 dark:shadow-black/50" // Scrolled state
+            : "bg-background/40 border-border/20 shadow-black/10 dark:shadow-black/20" // Top of page state
+        )}>
           <div className="flex items-center px-6 py-3 min-w-fit">
-            {/* Left: Logo */}
-            <div className="flex-shrink-0">
+            {/* Logo Section */}
+            <div className={cn(
+              "flex-shrink-0" // Prevent shrinking
+            )}>
               <Link 
                 href="/" 
-                className="group flex items-center space-x-2"
+                className={cn(
+                  "group", // Hover group
+                  "flex items-center space-x-3", // Flex layout with spacing
+                  "transition-all duration-200", // Smooth transitions
+                  "hover:scale-105" // Subtle hover scale
+                )}
               >
-                <div className="relative">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-primary/40 to-primary/20 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-all duration-500" />
-                  <div className="relative bg-gradient-to-br from-primary to-primary/80 rounded-full p-2.5 shadow-lg">
-                    <Sparkles className="h-5 w-5 text-white" />
-                  </div>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-lg font-bold bg-gradient-to-r from-primary via-primary/90 to-primary/70 bg-clip-text text-transparent">
-                    Noxion
-                  </span>
-                  <span className="text-[10px] text-muted-foreground font-medium tracking-wide">
-                    NOTION BLOG
-                  </span>
+                {/* Logo Icon */}
+                <div className={cn(
+                  "bg-primary", // Primary color background
+                  "rounded-full p-2", // Rounded corners and padding
+                  "shadow-md", // Medium shadow
+                  "group-hover:shadow-lg", // Larger shadow on hover
+                  "transition-shadow duration-200" // Smooth shadow transition
+                )}>
+                  <Sparkles className="h-5 w-5 text-white" />
                 </div>
               </Link>
             </div>
@@ -88,9 +131,7 @@ export function Header() {
             
             {/* Right: Actions */}
             <div className="flex-shrink-0 flex items-center space-x-3">
-              <div className="bg-muted/20 rounded-full p-1">
-                <ThemeToggle />
-              </div>
+              <ThemeToggle />
               
               {/* Mobile menu button */}
               <button
@@ -116,7 +157,13 @@ export function Header() {
             <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 rounded-full blur-xl opacity-60" />
             
             {/* Mobile menu content */}
-            <div className="relative bg-background/80 backdrop-blur-2xl border border-border/30 rounded-full shadow-2xl shadow-black/20 dark:shadow-black/40 supports-[backdrop-filter]:bg-background/70 p-6">
+            <div className={cn(
+              "relative rounded-full shadow-2xl border transition-all duration-300 p-6", // Base styles
+              "backdrop-blur-2xl supports-[backdrop-filter]:bg-background/70", // Backdrop blur
+              isScrolled 
+                ? "bg-background/90 border-border/50 shadow-black/30 dark:shadow-black/50" // Scrolled state
+                : "bg-background/50 border-border/20 shadow-black/10 dark:shadow-black/20" // Top of page state
+            )}>
               <div className="space-y-3">
                 {navItems.map((item) => {
                   const active = isActive(item.href)
