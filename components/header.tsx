@@ -29,10 +29,10 @@ export function Header() {
       {/* Dynamic Island Style Navigation Container */}
       <div className="relative">
         {/* Glow effect */}
-        <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 rounded-[32px] blur-xl opacity-60" />
+        <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 rounded-full blur-xl opacity-60" />
         
         {/* Main navigation pill */}
-        <div className="relative bg-background/70 backdrop-blur-2xl border border-border/30 rounded-[28px] shadow-2xl shadow-black/20 dark:shadow-black/40 supports-[backdrop-filter]:bg-background/60">
+        <div className="relative bg-background/70 backdrop-blur-2xl border border-border/30 rounded-full shadow-2xl shadow-black/20 dark:shadow-black/40 supports-[backdrop-filter]:bg-background/60">
           <div className="flex items-center px-6 py-3 min-w-fit">
             {/* Left: Logo */}
             <div className="flex-shrink-0">
@@ -41,8 +41,8 @@ export function Header() {
                 className="group flex items-center space-x-2"
               >
                 <div className="relative">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-primary/40 to-primary/20 rounded-2xl blur-md opacity-0 group-hover:opacity-100 transition-all duration-500" />
-                  <div className="relative bg-gradient-to-br from-primary to-primary/80 rounded-2xl p-2.5 shadow-lg">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-primary/40 to-primary/20 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-all duration-500" />
+                  <div className="relative bg-gradient-to-br from-primary to-primary/80 rounded-full p-2.5 shadow-lg">
                     <Sparkles className="h-5 w-5 text-white" />
                   </div>
                 </div>
@@ -113,10 +113,10 @@ export function Header() {
         <div className="md:hidden absolute top-full left-4 right-4 mt-4 z-40">
           <div className="relative">
             {/* Glow effect for mobile menu */}
-            <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 rounded-3xl blur-xl opacity-60" />
+            <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 rounded-full blur-xl opacity-60" />
             
             {/* Mobile menu content */}
-            <div className="relative bg-background/80 backdrop-blur-2xl border border-border/30 rounded-3xl shadow-2xl shadow-black/20 dark:shadow-black/40 supports-[backdrop-filter]:bg-background/70 p-6">
+            <div className="relative bg-background/80 backdrop-blur-2xl border border-border/30 rounded-full shadow-2xl shadow-black/20 dark:shadow-black/40 supports-[backdrop-filter]:bg-background/70 p-6">
               <div className="space-y-3">
                 {navItems.map((item) => {
                   const active = isActive(item.href)
