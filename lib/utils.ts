@@ -56,6 +56,43 @@ export function truncateText(text: string, maxLength: number): string {
   return text.substring(0, maxLength).trim() + '...'
 }
 
+// 마크다운 텍스트에서 플레인 텍스트 추출
+export function extractPlainTextFromMarkdown(markdown: string): string {
+  if (!markdown) return ''
+  
+  return markdown
+    // Remove markdown links [text](url) -> text
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    // Remove markdown images ![alt](url)
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, '')
+    // Remove markdown headers
+    .replace(/^#{1,6}\s+/gm, '')
+    // Remove markdown bold/italic
+    .replace(/(\*\*|__)(.*?)\1/g, '$2')
+    .replace(/(\*|_)(.*?)\1/g, '$2')
+    // Remove markdown code blocks
+    .replace(/```[\s\S]*?```/g, '')
+    // Remove inline code
+    .replace(/`([^`]+)`/g, '$1')
+    // Remove markdown blockquotes
+    .replace(/^>\s+/gm, '')
+    // Remove markdown lists
+    .replace(/^[\s]*[-*+]\s+/gm, '')
+    .replace(/^[\s]*\d+\.\s+/gm, '')
+    // Remove extra whitespace and newlines
+    .replace(/\n\s*\n/g, '\n')
+    .replace(/^\s+|\s+$/g, '')
+    .trim()
+}
+
+// 미리보기 텍스트 생성
+export function generatePreviewText(content: string, maxLength: number = 120): string {
+  const plainText = extractPlainTextFromMarkdown(content)
+  if (!plainText) return ''
+  
+  return truncateText(plainText, maxLength)
+}
+
 export function getReadingTimeText(minutes: number): string {
   return `${minutes} min read`
 }

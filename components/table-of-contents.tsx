@@ -1,132 +1,20 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
 import { cn } from '@/lib/utils'
 import { BookOpen } from 'lucide-react'
-
-interface Heading {
-  id: string
-  text: string
-  level: number
-}
+import { useTableOfContents } from '@/hooks/use-table-of-contents'
 
 interface TableOfContentsProps {
   content: string
 }
 
 export function TableOfContents({ content }: TableOfContentsProps) {
-  const [headings, setHeadings] = useState<Heading[]>([])
-  const [activeId, setActiveId] = useState<string>('')
-
-  // Extract headings from DOM (after markdown is rendered)
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const headingElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6')
-      const extractedHeadings: Heading[] = []
-      
-      headingElements.forEach((element) => {
-        const level = parseInt(element.tagName.charAt(1))
-        const text = element.textContent?.trim() || ''
-        const id = element.id || ''
-        
-        if (id && text) {
-          extractedHeadings.push({ id, text, level })
-        }
-      })
-      
-      setHeadings(extractedHeadings)
-    }, 100) // Small delay to ensure DOM is ready
-    
-    return () => clearTimeout(timer)
-  }, [content])
-
-  // Intersection observer for active heading detection
-  useEffect(() => {
-    if (headings.length === 0) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        // Find the heading that's currently most visible
-        const visibleHeadings = entries
-          .filter(entry => entry.isIntersecting)
-          .map(entry => ({
-            id: entry.target.id,
-            top: entry.boundingClientRect.top,
-            ratio: entry.intersectionRatio
-          }))
-          .sort((a, b) => a.top - b.top)
-
-        if (visibleHeadings.length > 0) {
-          setActiveId(visibleHeadings[0].id)
-        } else {
-          // If no headings are visible, find the one closest to the top
-          const allHeadings = headings.map(heading => {
-            const element = document.getElementById(heading.id)
-            return element ? {
-              id: heading.id,
-              top: element.getBoundingClientRect().top
-            } : null
-          }).filter(Boolean)
-          
-          if (allHeadings.length > 0) {
-            const closestHeading = allHeadings.reduce((closest, current) => 
-              Math.abs(current!.top) < Math.abs(closest!.top) ? current : closest
-            )
-            setActiveId(closestHeading!.id)
-          }
-        }
-      },
-      {
-        rootMargin: '-10% 0% -80% 0%',
-        threshold: [0, 0.1, 0.5, 1]
-      }
-    )
-
-    headings.forEach(({ id }) => {
-      const element = document.getElementById(id)
-      if (element) observer.observe(element)
-    })
-
-    return () => observer.disconnect()
-  }, [headings])
-
-  // Scroll to heading
-  const scrollToHeading = useCallback((id: string) => {
-    const element = document.getElementById(id)
-    if (element) {
-      const header = document.querySelector('header')
-      const headerHeight = header?.offsetHeight || 0
-      const offset = headerHeight + 16
-      
-      const elementPosition = element.offsetTop - offset
-      window.scrollTo({
-        top: elementPosition,
-        behavior: 'smooth'
-      })
-    }
-  }, [])
+  const { headings, activeId, scrollToHeading } = useTableOfContents(content)
 
   if (headings.length === 0) return null
 
   return (
-    <div className={cn(
-      "space-y-3" // Simple spacing
-    )}>
-      {/* Simple header */}
-      <div className={cn(
-        "flex items-center justify-between", // Header layout with space between
-        "text-sm font-medium text-foreground" // Text styling
-      )}>
-        <div className="flex items-center space-x-2">
-          <BookOpen className="h-4 w-4 text-muted-foreground" />
-          <span>Contents</span>
-        </div>
-        {/* Debug info - show active heading count */}
-        <div className="text-xs text-muted-foreground">
-          {headings.length} / {activeId ? '✓' : '✗'}
-        </div>
-      </div>
-
+    <div className="space-y-2">
       {/* Simple navigation list */}
       <div className="space-y-1">
         {headings.map((heading) => {
@@ -151,6 +39,13 @@ export function TableOfContents({ content }: TableOfContentsProps) {
             </button>
           )
         })}
+      </div>
+      
+      {/* Footer info */}
+      <div className="pt-2 border-t border-border/20">
+        <div className="text-xs text-muted-foreground text-center">
+          {headings.length} section{headings.length !== 1 ? 's' : ''} • {activeId ? 'Tracking' : 'Ready'}
+        </div>
       </div>
     </div>
   )

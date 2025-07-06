@@ -104,11 +104,21 @@ function createSlugFromTitle(title: string): string {
     .trim()
 }
 
-function calculateReadingTime(content: string): number {
+function calculateReadingTime(content: string | undefined): number {
+  if (!content || typeof content !== 'string') {
+    return 1 // 기본값으로 1분 읽기 시간 설정
+  }
+  
   const wordsPerMinute = 200
-  const words = content.trim().split(/\s+/).length
+  const trimmedContent = content.trim()
+  
+  if (!trimmedContent) {
+    return 1
+  }
+  
+  const words = trimmedContent.split(/\s+/).length
   const readingTime = Math.ceil(words / wordsPerMinute)
-  return readingTime
+  return Math.max(readingTime, 1) // 최소 1분
 }
 
 export async function getDatabasePages(): Promise<BlogPost[]> {
@@ -145,17 +155,39 @@ export async function getDatabasePages(): Promise<BlogPost[]> {
       const cover = getCoverImageUrl(page)
 
       if (title && published) {
-        posts.push({
-          id: page.id,
-          title,
-          slug,
-          summary,
-          published,
-          date: date || page.created_time,
-          tags,
-          cover,
-          lastEditedTime: page.last_edited_time,
-        })
+        try {
+          const content = await getPageContent(page.id)
+          
+          posts.push({
+            id: page.id,
+            title,
+            slug,
+            summary,
+            published,
+            date: date || page.created_time,
+            tags,
+            cover,
+            content: content || '', // content가 undefined일 경우 빈 문자열 사용
+            lastEditedTime: page.last_edited_time,
+            readingTime: calculateReadingTime(content),
+          })
+        } catch (error) {
+          console.error(`Error fetching content for page ${page.id}:`, error)
+          // content를 가져오지 못한 경우에도 포스트는 추가
+          posts.push({
+            id: page.id,
+            title,
+            slug,
+            summary,
+            published,
+            date: date || page.created_time,
+            tags,
+            cover,
+            content: '', // 에러 시 빈 문자열
+            lastEditedTime: page.last_edited_time,
+            readingTime: 1, // 기본 읽기 시간 1분
+          })
+        }
       }
     }
 
@@ -174,10 +206,12 @@ export async function getPageContent(pageId: string): Promise<string> {
   try {
     const mdBlocks = await n2m.pageToMarkdown(pageId)
     const mdString = n2m.toMarkdownString(mdBlocks)
-    return mdString.parent
+    
+    // mdString.parent가 undefined일 수 있으므로 안전하게 처리
+    return mdString?.parent || ''
   } catch (error) {
     console.error('Error fetching page content:', error)
-    throw error
+    return '' // 에러 발생 시 빈 문자열 반환
   }
 }
 
@@ -217,7 +251,7 @@ export async function getPageBySlug(slug: string): Promise<BlogPost | null> {
         const content = await getPageContent(pageByTitleSlug.id)
         return {
           ...pageByTitleSlug,
-          content,
+          content: content || '',
           readingTime: calculateReadingTime(content),
         }
       }
@@ -244,7 +278,7 @@ export async function getPageBySlug(slug: string): Promise<BlogPost | null> {
       date: date || page.created_time,
       tags,
       cover,
-      content,
+      content: content || '',
       lastEditedTime: page.last_edited_time,
       readingTime: calculateReadingTime(content),
     }
