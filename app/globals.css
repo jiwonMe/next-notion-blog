@@ -1,0 +1,611 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import 'katex/dist/katex.min.css';
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 262 83% 58%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 262 83% 58%;
+    --radius: 0.75rem;
+    
+    /* Custom variables */
+    --gradient-primary: linear-gradient(135deg, hsl(262 83% 58%) 0%, hsl(262 83% 48%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(240 4.8% 95.9%) 0%, hsl(240 4.8% 90%) 100%);
+    --shadow-primary: 0 10px 40px -10px hsl(262 83% 58% / 0.3);
+    --shadow-card: 0 4px 20px -4px hsl(240 10% 3.9% / 0.1);
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 262 83% 58%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 262 83% 58%;
+    
+    /* Custom variables for dark mode */
+    --gradient-primary: linear-gradient(135deg, hsl(262 83% 58%) 0%, hsl(262 83% 48%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(240 3.7% 15.9%) 0%, hsl(240 3.7% 10%) 100%);
+    --shadow-primary: 0 10px 40px -10px hsl(262 83% 58% / 0.4);
+    --shadow-card: 0 4px 20px -4px hsl(0 0% 0% / 0.3);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-secondary;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/30 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/50;
+  }
+}
+
+@layer components {
+  /* Glass morphism effect */
+  .glass {
+    @apply backdrop-blur-md bg-background/80 border border-border/50;
+  }
+  
+  .glass-strong {
+    @apply backdrop-blur-xl bg-background/90 border border-border/70;
+  }
+  
+  /* Gradient text */
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Custom shadows */
+  .shadow-primary {
+    box-shadow: var(--shadow-primary);
+  }
+  
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  
+  /* Animated background */
+  .animate-gradient {
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+  }
+  
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  /* Floating animation */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+  
+  /* Fade in animation */
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Slide up animation */
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out forwards;
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* Modern Prose Styling */
+.prose {
+  @apply text-foreground leading-relaxed;
+  max-width: none;
+}
+
+/* Headings */
+.prose h1 {
+  @apply text-4xl font-bold tracking-tight mb-6 mt-12 scroll-mt-20;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+}
+
+.prose h2 {
+  @apply text-3xl font-bold tracking-tight mb-5 mt-10 scroll-mt-20;
+  color: hsl(var(--foreground));
+  position: relative;
+}
+
+.prose h2::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: var(--gradient-primary);
+  border-radius: 2px;
+}
+
+.prose h3 {
+  @apply text-2xl font-semibold mb-4 mt-8 scroll-mt-20 text-foreground;
+}
+
+.prose h4 {
+  @apply text-xl font-semibold mb-3 mt-6 scroll-mt-20 text-foreground;
+}
+
+.prose h5 {
+  @apply text-lg font-semibold mb-3 mt-5 scroll-mt-20 text-foreground;
+}
+
+.prose h6 {
+  @apply text-base font-semibold mb-2 mt-4 scroll-mt-20 text-muted-foreground uppercase tracking-wide;
+}
+
+/* Paragraphs */
+.prose p {
+  @apply mb-6 leading-7 text-foreground;
+}
+
+.prose p:last-child {
+  @apply mb-0;
+}
+
+/* Links */
+.prose a {
+  @apply text-primary font-medium underline-offset-4 hover:underline transition-colors;
+  text-decoration: none;
+  position: relative;
+}
+
+.prose a:hover {
+  @apply text-primary/80;
+}
+
+.prose a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-primary);
+  transition: width 0.3s ease;
+}
+
+.prose a:hover::after {
+  width: 100%;
+}
+
+/* Code */
+.prose code {
+  @apply bg-muted text-foreground px-2 py-1 rounded-md text-sm font-mono;
+  font-weight: 500;
+}
+
+.prose pre {
+  @apply bg-card border rounded-xl p-6 overflow-x-auto my-6 shadow-card;
+  position: relative;
+}
+
+.prose pre code {
+  @apply bg-transparent p-0 text-sm leading-6;
+  color: inherit;
+}
+
+.prose pre::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  border-radius: 12px 12px 0 0;
+}
+
+/* Blockquotes */
+.prose blockquote {
+  @apply bg-muted/50 border-l-4 border-primary pl-6 pr-6 py-4 my-6 rounded-r-lg italic;
+  position: relative;
+}
+
+.prose blockquote::before {
+  content: '"';
+  @apply text-6xl text-primary/30 font-serif absolute -top-2 -left-2;
+}
+
+.prose blockquote p {
+  @apply mb-0 text-lg;
+}
+
+/* Images */
+.prose img {
+  @apply rounded-xl shadow-card my-8 w-full;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.prose img:hover {
+  @apply shadow-primary/20;
+  transform: scale(1.02);
+}
+
+/* Tables */
+.prose table {
+  @apply w-full border-collapse my-8 rounded-lg overflow-hidden shadow-card;
+}
+
+.prose th {
+  @apply bg-muted px-4 py-3 text-left font-semibold text-foreground border-b border-border;
+}
+
+.prose td {
+  @apply px-4 py-3 border-b border-border last:border-b-0;
+}
+
+.prose tr:hover {
+  @apply bg-muted/30;
+}
+
+/* Horizontal Rule */
+.prose hr {
+  @apply my-12 border-0 h-px;
+  background: linear-gradient(to right, transparent, hsl(var(--border)), transparent);
+}
+
+/* Strong and Emphasis */
+.prose strong {
+  @apply font-bold text-foreground;
+}
+
+.prose em {
+  @apply italic text-foreground;
+}
+
+/* Mark */
+.prose mark {
+  @apply bg-primary/20 text-foreground px-1 rounded;
+}
+
+/* Small text */
+.prose small {
+  @apply text-sm text-muted-foreground;
+}
+
+/* Notion Callouts */
+.prose .notion-callout {
+  @apply my-6 p-6 rounded-xl border-l-4 shadow-card;
+  position: relative;
+  background: hsl(var(--muted) / 0.3);
+}
+
+.prose .notion-callout.info {
+  @apply border-blue-500 bg-blue-50/50 dark:bg-blue-900/20;
+}
+
+.prose .notion-callout.warning {
+  @apply border-yellow-500 bg-yellow-50/50 dark:bg-yellow-900/20;
+}
+
+.prose .notion-callout.error {
+  @apply border-red-500 bg-red-50/50 dark:bg-red-900/20;
+}
+
+.prose .notion-callout.success {
+  @apply border-green-500 bg-green-50/50 dark:bg-green-900/20;
+}
+
+.prose .notion-callout::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, currentColor, transparent);
+  border-radius: 0 4px 4px 0;
+}
+
+/* Task Lists */
+.prose ul[data-type="taskList"] {
+  list-style: none;
+  @apply space-y-2;
+}
+
+.prose ul[data-type="taskList"] li {
+  @apply flex items-start gap-3;
+}
+
+.prose ul[data-type="taskList"] li::before {
+  display: none;
+}
+
+.prose input[type="checkbox"] {
+  @apply mt-1 rounded border-2 border-muted-foreground/30 text-primary focus:ring-primary focus:ring-offset-0;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+/* Keyboard shortcuts */
+.prose kbd {
+  @apply bg-card border border-border rounded px-2 py-1 text-xs font-mono shadow-sm;
+  border-bottom-width: 2px;
+}
+
+/* Footnotes */
+.prose .footnotes {
+  @apply mt-12 pt-6 border-t border-border;
+}
+
+.prose .footnotes ol {
+  @apply text-sm;
+}
+
+/* Abbreviations */
+.prose abbr {
+  @apply border-b border-dotted border-muted-foreground cursor-help;
+  text-decoration: none;
+}
+
+/* Figure and figcaption */
+.prose figure {
+  @apply my-8;
+}
+
+.prose figcaption {
+  @apply mt-3 text-center text-sm text-muted-foreground italic;
+}
+
+/* KaTeX customizations for dark mode */
+.dark .katex {
+  color: inherit;
+}
+
+.dark .katex .mord {
+  color: inherit;
+}
+
+.dark .katex .mop {
+  color: inherit;
+}
+
+.dark .katex .mbin {
+  color: inherit;
+}
+
+.dark .katex .mrel {
+  color: inherit;
+}
+
+.dark .katex .mopen,
+.dark .katex .mclose {
+  color: inherit;
+}
+
+.dark .katex .mpunct {
+  color: inherit;
+}
+
+.dark .katex .minner {
+  color: inherit;
+}
+
+/* Ensure math blocks have proper spacing */
+.katex-display {
+  @apply my-6 overflow-x-auto;
+}
+
+.katex {
+  @apply text-base;
+}
+
+/* Math block container */
+.math.math-display {
+  @apply text-center my-6;
+}
+
+.math.math-inline {
+  @apply inline;
+}
+
+/* List styling improvements */
+.prose ul,
+.prose ol {
+  @apply space-y-2;
+}
+
+.prose ul > li,
+.prose ol > li {
+  @apply relative pl-0;
+}
+
+.prose ul > li::marker,
+.prose ol > li::marker {
+  @apply text-primary;
+}
+
+.prose ul {
+  list-style-type: none;
+}
+
+.prose ul > li::before {
+  content: "•";
+  @apply absolute left-0 top-0 text-primary font-bold;
+  margin-left: -1rem;
+}
+
+.prose ol {
+  counter-reset: list-counter;
+  list-style-type: none;
+}
+
+.prose ol > li {
+  counter-increment: list-counter;
+}
+
+.prose ol > li::before {
+  content: counter(list-counter) ".";
+  @apply absolute left-0 top-0 text-primary font-semibold;
+  margin-left: -1.5rem;
+  min-width: 1.25rem;
+}
+
+.prose ul ul,
+.prose ol ol,
+.prose ul ol,
+.prose ol ul {
+  @apply mt-2 mb-2;
+}
+
+.prose li > ul,
+.prose li > ol {
+  @apply mt-2;
+}
+
+/* Nested list indentation */
+.prose ul ul > li::before,
+.prose ol ol > li::before {
+  @apply text-muted-foreground;
+}
+
+/* Details/Summary styling */
+.prose details {
+  @apply my-4 rounded-lg border border-border bg-card;
+}
+
+.prose details summary {
+  @apply cursor-pointer select-none rounded-t-lg bg-muted px-4 py-3 font-medium text-foreground hover:bg-muted/80;
+  list-style: none;
+}
+
+.prose details summary::-webkit-details-marker {
+  display: none;
+}
+
+.prose details summary::before {
+  content: "▶";
+  @apply mr-2 inline-block transition-transform;
+}
+
+.prose details[open] summary::before {
+  @apply rotate-90;
+}
+
+.prose details[open] summary {
+  @apply rounded-b-none border-b border-border;
+}
+
+.prose details > *:not(summary) {
+  @apply px-4 py-3;
+}
+
+.prose details > p:last-child {
+  @apply pb-4;
+}
+
+/* Custom collapsible content styling */
+.prose details .details-content {
+  @apply space-y-3;
+}
+
+.prose details .details-content > *:first-child {
+  @apply mt-0;
+}
+
+.prose details .details-content > *:last-child {
+  @apply mb-0;
+}
