@@ -1,44 +1,15 @@
 import { getDatabasePages } from '@/lib/notion'
-import { BlogCard } from '@/components/blog-card'
+import { BlogCard } from '@/components/features/blog'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Suspense } from 'react'
 import { ArrowRight, Sparkles, Zap, Palette, Clock, Calendar, Github, Twitter, Linkedin, Mail, User, Users, Coffee, Code, BookOpen } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { generateHomepageOGImageUrl, getBaseUrl } from '@/lib/og-image'
-import { Metadata } from 'next'
+import { generateHomepageMetadata } from '@/lib/metadata'
+import { HeroSkeleton, BlogCardSkeleton } from '@/components/ui/skeletons'
 
-export const metadata: Metadata = {
-  title: 'Noxion Blog - Write in Notion, Publish Beautifully',
-  description: 'Transform your Notion pages into a stunning blog. Share your thoughts, stories, and insights with the world.',
-  keywords: ['notion', 'blog', 'writing', 'publishing', 'nextjs'],
-  authors: [{ name: 'Noxion' }],
-  openGraph: {
-    title: 'Noxion Blog - Write in Notion, Publish Beautifully',
-    description: 'Transform your Notion pages into a stunning blog. Share your thoughts, stories, and insights with the world.',
-    type: 'website',
-    images: [
-      {
-        url: generateHomepageOGImageUrl(getBaseUrl()),
-        width: 1200,
-        height: 630,
-        alt: 'Noxion Blog',
-      },
-    ],
-    url: getBaseUrl(),
-    siteName: 'Noxion Blog',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Noxion Blog - Write in Notion, Publish Beautifully',
-    description: 'Transform your Notion pages into a stunning blog. Share your thoughts, stories, and insights with the world.',
-    images: [generateHomepageOGImageUrl(getBaseUrl())],
-  },
-  alternates: {
-    canonical: getBaseUrl(),
-  },
-}
+export const metadata = generateHomepageMetadata()
 
 function LoadingSkeleton() {
   return (
@@ -67,43 +38,7 @@ function LoadingSkeleton() {
   )
 }
 
-function HeroSkeleton() {
-  return (
-    <section className="relative overflow-hidden py-12 sm:py-16 lg:py-20">
-      <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          <div className="lg:col-span-7 space-y-8">
-            <div className="space-y-6">
-              <div className="h-8 w-32 bg-muted rounded-full animate-pulse"></div>
-              <div className="space-y-4">
-                <div className="h-16 w-full bg-muted rounded animate-pulse"></div>
-                <div className="h-16 w-4/5 bg-muted rounded animate-pulse"></div>
-              </div>
-              <div className="space-y-2">
-                <div className="h-6 w-full bg-muted rounded animate-pulse"></div>
-                <div className="h-6 w-3/4 bg-muted rounded animate-pulse"></div>
-              </div>
-              <div className="flex gap-4">
-                <div className="h-12 w-32 bg-muted rounded animate-pulse"></div>
-                <div className="h-12 w-24 bg-muted rounded animate-pulse"></div>
-              </div>
-            </div>
-          </div>
-          <div className="lg:col-span-5">
-            <div className="bg-muted rounded-2xl p-6 animate-pulse">
-              <div className="aspect-[16/10] bg-muted-foreground/20 rounded-lg mb-4"></div>
-              <div className="space-y-3">
-                <div className="h-4 w-1/3 bg-muted-foreground/20 rounded"></div>
-                <div className="h-6 w-full bg-muted-foreground/20 rounded"></div>
-                <div className="h-4 w-5/6 bg-muted-foreground/20 rounded"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
+// Using the centralized HeroSkeleton component
 
 function TopicsSkeleton() {
   return (
@@ -210,7 +145,7 @@ async function HeroSection() {
             {/* Main Heading */}
             <div className="space-y-4">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
-                Hello, I'm a <span className="gradient-text">Developer</span>
+                Hello, I&apos;m a <span className="gradient-text">Developer</span>
               </h1>
               <p className="text-xl sm:text-2xl text-muted-foreground font-light max-w-2xl mx-auto lg:mx-0">
                 Sharing code, ideas, and experiences
@@ -300,7 +235,7 @@ async function HeroSection() {
               {recentPosts.map((post, index) => (
                 <Link
                   key={post.id}
-                  href={`/posts/${post.slug}`}
+                  href={`/articles/${post.slug}`}
                   className="block group"
                 >
                   <div className="p-4 bg-card border border-border rounded-lg hover:shadow-md transition-all duration-300 hover:-translate-y-1">
@@ -452,7 +387,7 @@ async function AboutSection() {
                       </div>
                       
                       <h3 className="text-xl font-semibold leading-tight group-hover:text-primary transition-colors">
-                        <Link href={`/posts/${post.slug}`}>
+                        <Link href={`/articles/${post.slug}`}>
                           {post.title}
                         </Link>
                       </h3>
@@ -473,7 +408,7 @@ async function AboutSection() {
                           ))}
                         </div>
                         <Button variant="ghost" size="sm" asChild>
-                          <Link href={`/posts/${post.slug}`}>
+                          <Link href={`/articles/${post.slug}`}>
                             읽기
                             <ArrowRight className="ml-1 w-3 h-3" />
                           </Link>

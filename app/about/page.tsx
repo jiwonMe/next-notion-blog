@@ -1,9 +1,6 @@
-import { generateMetadata as generateMeta } from '@/lib/utils'
+import { generateAboutMetadata } from '@/lib/metadata'
 
-export const metadata = generateMeta(
-  'About - Noxion',
-  'Learn more about Noxion, a modern blog powered by Notion and Next.js'
-)
+export const metadata = generateAboutMetadata()
 
 export default function AboutPage() {
   return (
@@ -14,7 +11,7 @@ export default function AboutPage() {
         <div className="prose prose-lg max-w-none dark:prose-invert">
           <p className="lead">
             Noxion is a modern, fast, and beautiful blog platform that bridges the gap 
-            between Notion's powerful content management capabilities and Next.js's 
+            between Notion&apos;s powerful content management capabilities and Next.js&apos;s 
             performance-focused web framework.
           </p>
 
@@ -22,7 +19,7 @@ export default function AboutPage() {
           
           <ul>
             <li>
-              <strong>Notion-powered content:</strong> Write your posts in Notion's 
+              <strong>Notion-powered content:</strong> Write your posts in Notion&apos;s 
               intuitive interface with rich formatting, databases, and collaborative features.
             </li>
             <li>
@@ -57,7 +54,7 @@ export default function AboutPage() {
           <h2>Getting Started</h2>
           
           <p>
-            To set up your own Noxion blog, you'll need:
+            To set up your own Noxion blog, you&apos;ll need:
           </p>
           
           <ol>

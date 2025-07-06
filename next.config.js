@@ -3,6 +3,15 @@ const nextConfig = {
   images: {
     domains: ['www.notion.so', 'images.unsplash.com'],
   },
+  async redirects() {
+    return [
+      {
+        source: '/posts/:slug',
+        destination: '/articles/:slug',
+        permanent: true,
+      },
+    ]
+  },
   async headers() {
     return [
       {

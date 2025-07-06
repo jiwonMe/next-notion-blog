@@ -1,4 +1,7 @@
 import Link from 'next/link'
+import { generateErrorMetadata } from '@/lib/metadata'
+
+export const metadata = generateErrorMetadata('not-found')
 
 export default function NotFound() {
   return (
@@ -7,7 +10,7 @@ export default function NotFound() {
         <h1 className="mb-4 text-6xl font-bold text-muted-foreground">404</h1>
         <h2 className="mb-4 text-3xl font-bold">Page Not Found</h2>
         <p className="mb-8 text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+          The page you&apos;re looking for doesn&apos;t exist or has been moved.
         </p>
         <Link
           href="/"

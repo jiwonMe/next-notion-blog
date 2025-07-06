@@ -2,8 +2,8 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ThemeToggle } from './theme-toggle'
-import { ProgressiveBlurBackdrop } from './progressive-blur-backdrop'
+import { ThemeToggle } from '../common/theme-toggle'
+import { ProgressiveBlurBackdrop } from '../common/progressive-blur-backdrop'
 import { Sparkles, Menu, X, Home, FileText, User, BookOpen, List } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
 import { cn } from '@/lib/utils'
@@ -35,7 +35,7 @@ export function Header() {
   }
 
   // Check if we're on an article page
-  const isArticlePage = pathname.startsWith('/posts/')
+  const isArticlePage = pathname.startsWith('/articles/') && pathname.includes('/')
   const showTableOfContents = isArticlePage && headings.length > 0
 
   // Close TOC dropdown when clicking outside

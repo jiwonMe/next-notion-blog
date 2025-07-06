@@ -57,7 +57,7 @@ export function BlogCard({
         "bg-card border border-border hover:shadow-md transition-shadow",
         className
       )}>
-        <Link href={`/posts/${post.slug}`} className="block p-4">
+        <Link href={`/articles/${post.slug}`} className="block p-4">
           <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
             {/* Mobile: Stack image and content vertically */}
             {post.cover && (
@@ -162,7 +162,7 @@ export function BlogCard({
       
       className
     )}>
-      <Link href={`/posts/${post.slug}`} className="block flex flex-col h-full">
+      <Link href={`/articles/${post.slug}`} className="block flex flex-col h-full">
         {/* Cover Image or Placeholder */}
         <div className={cn(
           "relative overflow-hidden flex-shrink-0",

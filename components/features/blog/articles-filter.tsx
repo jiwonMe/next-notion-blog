@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useMemo, useCallback, useEffect } from 'react'
-import { BlogCard } from '@/components/blog-card'
+import { BlogCard } from './blog-card'
 import { BlogPost } from '@/types/notion'
-import { ArticleSearch } from '@/components/article-search'
+import { ArticleSearch } from '../search/article-search'
 import { Search, Filter, X, Grid, List, Calendar, Hash, TrendingUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -101,7 +101,7 @@ export function ArticlesFilter({ posts }: ArticlesFilterProps) {
   const handlePostSelect = useCallback((post: BlogPost) => {
     setSelectedPost(post)
     // Navigate to post page
-    window.location.href = `/posts/${post.slug}`
+    window.location.href = `/articles/${post.slug}`
   }, [])
 
   const handleSearchChange = useCallback((term: string) => {

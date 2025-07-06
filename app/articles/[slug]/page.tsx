@@ -1,12 +1,12 @@
 import { getPageBySlug, getAllSlugs } from '@/lib/notion'
-import { MarkdownContent } from '@/components/markdown-content'
-import { ArticleSidebar } from '@/components/article-sidebar'
+import { MarkdownContent } from '@/components/features/article'
+import { ArticleSidebar } from '@/components/features/article'
 import { formatDate, getReadingTimeText } from '@/lib/utils'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { generatePostOGMetadata, generateTwitterMetadata, getBaseUrl } from '@/lib/og-image'
+import { generatePostMetadata, generateErrorMetadata } from '@/lib/metadata'
 
 interface PageProps {
   params: {
@@ -23,37 +23,10 @@ export async function generateMetadata({ params }: PageProps) {
   const post = await getPageBySlug(params.slug)
   
   if (!post) {
-    return {
-      title: 'Post Not Found',
-      description: 'The requested post could not be found.',
-    }
+    return generateErrorMetadata('not-found')
   }
 
-  const baseUrl = getBaseUrl()
-  const ogMetadata = generatePostOGMetadata(post, baseUrl)
-  const twitterMetadata = generateTwitterMetadata(post, baseUrl)
-
-  return {
-    title: post.title,
-    description: post.summary || `Read ${post.title} on Noxion`,
-    keywords: post.tags?.join(', '),
-    authors: [{ name: 'Noxion' }],
-    openGraph: {
-      title: post.title,
-      description: ogMetadata.description,
-      type: 'article',
-      publishedTime: post.date,
-      modifiedTime: post.lastEditedTime,
-      tags: post.tags,
-      images: ogMetadata.images,
-      url: `${baseUrl}/posts/${post.slug}`,
-      siteName: 'Noxion Blog',
-    },
-    twitter: twitterMetadata,
-    alternates: {
-      canonical: `${baseUrl}/posts/${post.slug}`,
-    },
-  }
+  return generatePostMetadata(post)
 }
 
 export default async function PostPage({ params }: PageProps) {
@@ -78,7 +51,7 @@ export default async function PostPage({ params }: PageProps) {
           "py-8"
         )}>
           <Link 
-            href="/" 
+            href="/articles" 
             className={cn(
               // Layout
               "inline-flex items-center",
@@ -90,7 +63,7 @@ export default async function PostPage({ params }: PageProps) {
               "transition-colors"
             )}
           >
-            ← Back to posts
+            ← Back to articles
           </Link>
         </nav>
 
@@ -252,7 +225,7 @@ export default async function PostPage({ params }: PageProps) {
                   Last updated on {formatDate(post.lastEditedTime)}
                 </p>
                 <Link 
-                  href="/" 
+                  href="/articles" 
                   className={cn(
                     // Layout
                     "inline-flex items-center",
@@ -264,7 +237,7 @@ export default async function PostPage({ params }: PageProps) {
                     "transition-colors"
                   )}
                 >
-                  ← All posts
+                  ← All articles
                 </Link>
               </div>
             </footer>
