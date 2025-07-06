@@ -8,11 +8,14 @@ import rehypeKatex from 'rehype-katex'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import { cn } from '@/lib/utils'
+import { useState } from 'react'
+import { Copy, Check } from 'lucide-react'
 
 interface MarkdownContentProps {
   content: string
   className?: string
 }
+
 
 export function MarkdownContent({ content, className }: MarkdownContentProps) {
   return (
@@ -123,12 +126,73 @@ export function MarkdownContent({ content, className }: MarkdownContentProps) {
             )
           },
 
-          // Pre (code blocks)
-          pre: ({ children, ...props }) => (
-            <pre className="mb-6 p-4 bg-muted rounded-lg overflow-x-auto border text-sm" {...props}>
-              {children}
-            </pre>
-          ),
+          // Pre (code blocks) - Enhanced with syntax highlighting
+          pre: ({ children, ...props }: any) => {
+            const child = children?.props
+            const language = child?.className?.replace('language-', '') || 'text'
+            const codeContent = String(child?.children || '')
+            
+            const [copied, setCopied] = useState(false)
+            
+            const copyToClipboard = async () => {
+              try {
+                await navigator.clipboard.writeText(codeContent)
+                setCopied(true)
+                setTimeout(() => setCopied(false), 2000)
+              } catch (err) {
+                console.error('Failed to copy code:', err)
+              }
+            }
+            
+            if (child?.className?.includes('language-')) {
+              return (
+                <div className="relative group mb-6">
+                  {/* Header with language and copy button */}
+                  <div className="flex items-center justify-between px-4 py-2 bg-muted/50 border border-b-0 rounded-t-lg text-sm">
+                    <span className="text-muted-foreground font-mono lowercase">
+                      {language}
+                    </span>
+                    <button
+                      onClick={copyToClipboard}
+                      className="flex items-center gap-2 px-2 py-1 text-muted-foreground hover:text-foreground transition-colors rounded opacity-0 group-hover:opacity-100"
+                      title="Copy code"
+                    >
+                      {copied ? (
+                        <>
+                          <Check className="h-3 w-3" />
+                          <span className="text-xs">Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="h-3 w-3" />
+                          <span className="text-xs">Copy</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  
+                  {/* Code content */}
+                  <pre className="bg-muted border rounded-b-lg overflow-x-auto text-sm leading-6 m-0 p-4">
+                    {children}
+                  </pre>
+                </div>
+              )
+            }
+            
+            // Fallback for code blocks without language
+            return (
+              <div className="relative group mb-6">
+                <div className="flex items-center justify-between px-4 py-2 bg-muted/50 border border-b-0 rounded-t-lg text-sm">
+                  <span className="text-muted-foreground font-mono">
+                    code
+                  </span>
+                </div>
+                <pre className="bg-muted border rounded-b-lg overflow-x-auto text-sm p-4 m-0" {...props}>
+                  {children}
+                </pre>
+              </div>
+            )
+          },
 
           // Blockquotes
           blockquote: ({ children, ...props }) => (

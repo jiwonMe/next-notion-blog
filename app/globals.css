@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import 'katex/dist/katex.min.css';
+@import 'highlight.js/styles/github-dark.css';
 
 @layer base {
   :root {
@@ -233,4 +234,144 @@
 
 .anchor-link:hover {
   @apply text-primary;
+}
+
+/* Code Highlighting Customization */
+.hljs {
+  background: transparent !important;
+  color: inherit !important;
+  padding: 0 !important;
+}
+
+/* Light theme syntax highlighting */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-title,
+.hljs-section,
+.hljs-doctag,
+.hljs-name,
+.hljs-strong {
+  @apply text-blue-600 dark:text-blue-400;
+}
+
+.hljs-string,
+.hljs-title.class_,
+.hljs-title.class_.inherited__,
+.hljs-title.function_,
+.hljs-attr,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-link,
+.hljs-emphasis,
+.hljs-quote {
+  @apply text-green-600 dark:text-green-400;
+}
+
+.hljs-number,
+.hljs-regexp,
+.hljs-literal,
+.hljs-type {
+  @apply text-orange-600 dark:text-orange-400;
+}
+
+.hljs-comment,
+.hljs-quote {
+  @apply text-gray-500 dark:text-gray-400 italic;
+}
+
+.hljs-meta,
+.hljs-meta .hljs-keyword {
+  @apply text-purple-600 dark:text-purple-400;
+}
+
+.hljs-meta .hljs-string {
+  @apply text-green-600 dark:text-green-400;
+}
+
+.hljs-deletion {
+  @apply bg-red-100 dark:bg-red-900/30;
+}
+
+.hljs-addition {
+  @apply bg-green-100 dark:bg-green-900/30;
+}
+
+/* Additional syntax highlighting */
+.hljs-variable,
+.hljs-template-variable {
+  @apply text-red-600 dark:text-red-400;
+}
+
+.hljs-built_in,
+.hljs-subst {
+  @apply text-cyan-600 dark:text-cyan-400;
+}
+
+.hljs-formula {
+  @apply bg-gray-100 dark:bg-gray-800 italic;
+}
+
+/* Articles page animations */
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered animation delay for articles */
+.animate-stagger {
+  animation-fill-mode: both;
+}
+
+/* Enhanced skeleton animations */
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Shimmer effect for skeletons */
+.skeleton-shimmer {
+  background: linear-gradient(90deg, 
+    hsl(var(--muted)) 25%, 
+    hsl(var(--muted) / 0.5) 50%, 
+    hsl(var(--muted)) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Hide scrollbar */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

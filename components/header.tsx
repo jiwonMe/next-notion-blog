@@ -35,6 +35,12 @@ export function Header() {
             </Link>
           </Button>
           <Button variant="ghost" size="sm" asChild className="relative group overflow-hidden">
+            <Link href="/articles">
+              <span className="relative z-10">Articles</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </Link>
+          </Button>
+          <Button variant="ghost" size="sm" asChild className="relative group overflow-hidden">
             <Link href="/about">
               <span className="relative z-10">About</span>
               <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
