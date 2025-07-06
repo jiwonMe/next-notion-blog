@@ -78,6 +78,33 @@
     scroll-behavior: smooth;
   }
   
+  /* Ensure backdrop-filter support */
+  @supports (backdrop-filter: blur(16px)) {
+    .backdrop-blur-xl {
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+    
+    .backdrop-blur-2xl {
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+    }
+    
+    .backdrop-blur-md {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+  }
+  
+  /* Fallback for browsers without backdrop-filter support */
+  @supports not (backdrop-filter: blur(16px)) {
+    .backdrop-blur-xl,
+    .backdrop-blur-2xl,
+    .backdrop-blur-md {
+      background-color: hsl(var(--background) / 0.95);
+    }
+  }
+  
   /* Custom scrollbar */
   ::-webkit-scrollbar {
     width: 6px;
@@ -374,4 +401,12 @@
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* Line clamp utility */
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
