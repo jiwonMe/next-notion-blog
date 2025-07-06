@@ -1,21 +1,70 @@
 # Noxion 📝
 
-A modern, fast, and beautiful blog platform powered by Notion and Next.js 14.
+A modern, fast, and beautiful blog platform powered by Notion and Next.js 14. Transform your Notion pages into a stunning blog with zero coding required.
 
-## Features
+## ✨ Features
 
 - 📝 **Notion-powered content**: Write your posts in Notion's intuitive interface
 - ⚡ **Next.js 14 App Router**: Built with the latest Next.js features for optimal performance
-- 🎨 **Beautiful design**: Clean, responsive design with dark mode support
+- 🎨 **Beautiful design**: Clean, responsive design with dark mode support using Tailwind CSS
 - 🚀 **Fast loading**: Incremental Static Regeneration (ISR) for optimal performance
-- 🔍 **SEO optimized**: Built-in SEO best practices
-- 🏷️ **Tag system**: Organize your posts with tags
+- 🔍 **SEO optimized**: Built-in SEO best practices with meta tags and Open Graph
+- 🏷️ **Tag system**: Organize your posts with tags and categories
 - 📊 **Reading time**: Automatic reading time estimation
-- 🌙 **Dark mode**: Toggle between light and dark themes
+- 🌙 **Dark mode**: Toggle between light and dark themes with next-themes
 - 📱 **Mobile-first**: Responsive design that works on all devices
 - 🔧 **TypeScript**: Fully typed for better development experience
+- 🖼️ **Image optimization**: Automatic image optimization and cover image support
+- 📝 **Markdown support**: Rich content rendering with syntax highlighting
+- 🎯 **Math equations**: KaTeX support for mathematical expressions
+- 🔗 **Auto-linking**: Automatic heading anchors and table of contents
 
-## Demo
+## 🚀 Tech Stack
+
+- **Framework**: Next.js 14 with App Router
+- **Styling**: Tailwind CSS + shadcn/ui components
+- **Content**: Notion API + notion-to-md
+- **Typography**: @tailwindcss/typography
+- **Icons**: Lucide React + Radix Icons
+- **Theme**: next-themes for dark mode
+- **Math**: KaTeX for equations
+- **Code**: highlight.js for syntax highlighting
+- **Date**: date-fns for date formatting
+
+## 📦 Project Structure
+
+```
+next-notion-blog/
+├── app/                    # Next.js 14 App Router
+│   ├── layout.tsx         # Root layout with theme provider
+│   ├── page.tsx          # Homepage with hero and blog posts
+│   ├── globals.css       # Global styles and CSS variables
+│   ├── about/            # About page
+│   ├── posts/[slug]/     # Dynamic blog post pages
+│   ├── manifest.ts       # PWA manifest
+│   ├── robots.ts         # Robots.txt generation
+│   └── sitemap.ts        # Sitemap generation
+├── components/            # Reusable React components
+│   ├── ui/               # shadcn/ui components
+│   ├── blog-card.tsx     # Blog post card component
+│   ├── header.tsx        # Site navigation header
+│   ├── footer.tsx        # Site footer
+│   ├── theme-provider.tsx # Theme context provider
+│   ├── theme-toggle.tsx  # Dark mode toggle
+│   └── markdown-content.tsx # Markdown renderer
+├── lib/                  # Utility functions and API
+│   ├── notion.ts         # Notion API integration
+│   └── utils.ts          # Utility functions
+├── types/                # TypeScript type definitions
+│   └── notion.ts         # Notion-specific types
+└── Configuration files
+    ├── next.config.js    # Next.js configuration
+    ├── tailwind.config.js # Tailwind CSS configuration
+    ├── tsconfig.json     # TypeScript configuration
+    └── components.json   # shadcn/ui configuration
+```
+
+## 🎯 Demo
 
 Check out a live demo at [your-demo-url.com](https://your-demo-url.com)
 
@@ -66,7 +115,9 @@ Create a new Notion database with the following properties:
 git clone https://github.com/your-username/noxion.git
 cd noxion
 
-# Install dependencies
+# Install dependencies (using pnpm for faster installs)
+pnpm install
+# or
 npm install
 
 # Copy environment variables
@@ -77,19 +128,50 @@ cp .env.example .env.local
 # NOTION_DATABASE_ID=your_database_id
 
 # Run the development server
+pnpm dev
+# or
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to see your blog.
 
+## 📜 Available Scripts
+
+```bash
+pnpm dev          # Start development server
+pnpm build        # Build for production
+pnpm start        # Start production server
+pnpm lint         # Run ESLint
+pnpm type-check   # Run TypeScript type checking
+```
+
 ## Configuration
 
 ### Environment Variables
 
-- `NOTION_TOKEN`: Your Notion integration token (required)
-- `NOTION_DATABASE_ID`: Your Notion database ID (required)
-- `NEXT_PUBLIC_SITE_URL`: Your site URL for SEO
-- `NEXT_PUBLIC_SITE_NAME`: Your site name
+Create a `.env.local` file based on `.env.example`:
+
+```bash
+# Required - Notion Configuration
+NOTION_TOKEN=your_notion_integration_token_here
+NOTION_DATABASE_ID=your_notion_database_id_here
+
+# Optional - Site Configuration
+NEXT_PUBLIC_SITE_URL=https://your-domain.com
+NEXT_PUBLIC_SITE_NAME=Noxion
+
+# Optional - Analytics
+NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=your_ga_id_here
+```
+
+**Required Variables:**
+- `NOTION_TOKEN`: Your Notion integration token
+- `NOTION_DATABASE_ID`: Your Notion database ID
+
+**Optional Variables:**
+- `NEXT_PUBLIC_SITE_URL`: Your site URL for SEO and Open Graph
+- `NEXT_PUBLIC_SITE_NAME`: Your site name for branding
+- `NEXT_PUBLIC_GOOGLE_ANALYTICS_ID`: Google Analytics tracking ID
 
 ### Customization
 
