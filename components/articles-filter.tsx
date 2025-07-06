@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import { BlogCard } from '@/components/blog-card'
 import { BlogPost } from '@/types/notion'
 import { ArticleSearch } from '@/components/article-search'
@@ -17,6 +17,25 @@ export function ArticlesFilter({ posts }: ArticlesFilterProps) {
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
   const [sortBy, setSortBy] = useState<'date' | 'title' | 'popularity'>('date')
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+
+  // Set mobile default to list view
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setViewMode('list')
+      } else {
+        setViewMode('grid')
+      }
+    }
+
+    // Set initial view mode
+    handleResize()
+
+    // Add event listener for window resize
+    window.addEventListener('resize', handleResize)
+    
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null)
 
   // Get all unique tags with counts
@@ -340,95 +359,14 @@ export function ArticlesFilter({ posts }: ArticlesFilterProps) {
             {filteredPosts.map((post, index) => (
               <div 
                 key={post.id} 
-                className={cn(
-                  "animate-fade-in",
-                  viewMode === 'list' && "border rounded-lg p-4 bg-card hover:shadow-md transition-shadow"
-                )}
+                className="animate-fade-in"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
-                {viewMode === 'grid' ? (
-                  <BlogCard post={post} />
-                ) : (
-                  /* List View - Mobile Optimized */
-                  <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
-                    {/* Mobile: Stack image and content vertically */}
-                    {post.cover && (
-                      <div className="w-full sm:w-24 sm:flex-shrink-0">
-                        <img
-                          src={post.cover}
-                          alt=""
-                          className="w-full sm:w-24 h-40 sm:h-16 rounded object-cover"
-                        />
-                      </div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <div className="space-y-3">
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-base sm:text-lg mb-2 line-clamp-2 sm:line-clamp-1">
-                            <a 
-                              href={`/posts/${post.slug}`}
-                              className="hover:text-primary transition-colors"
-                            >
-                              {post.title}
-                            </a>
-                          </h3>
-                          <p className="text-muted-foreground text-sm mb-3 line-clamp-3 sm:line-clamp-2">
-                            {post.summary || 'No description available'}
-                          </p>
-                          <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs text-muted-foreground">
-                            <div className="flex items-center gap-1">
-                              <Calendar className="h-3 w-3" />
-                              <span>{new Date(post.date).toLocaleDateString()}</span>
-                            </div>
-                            {post.readingTime && (
-                              <div className="flex items-center gap-1">
-                                <Filter className="h-3 w-3" />
-                                <span>{post.readingTime}m read</span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        {/* Mobile: Move tags below content */}
-                        <div className="flex flex-wrap gap-1">
-                          {/* Show 2 tags on mobile, 3 on desktop */}
-                          {post.tags?.slice(0, 2).map((tag) => (
-                            <Button
-                              key={tag}
-                              variant="outline"
-                              size="sm"
-                              onClick={() => setSelectedTag(tag)}
-                              className="h-6 px-2 text-xs"
-                            >
-                              {tag}
-                            </Button>
-                          ))}
-                          {/* Show 3rd tag only on sm+ screens */}
-                          {post.tags && post.tags.length > 2 && (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => setSelectedTag(post.tags[2])}
-                              className="hidden sm:inline-flex h-6 px-2 text-xs"
-                            >
-                              {post.tags[2]}
-                            </Button>
-                          )}
-                          {/* Show remaining count */}
-                          {post.tags && post.tags.length > 2 && (
-                            <span className="text-xs text-muted-foreground self-center sm:hidden">
-                              +{post.tags.length - 2} more
-                            </span>
-                          )}
-                          {post.tags && post.tags.length > 3 && (
-                            <span className="hidden sm:inline text-xs text-muted-foreground self-center">
-                              +{post.tags.length - 3} more
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                <BlogCard 
+                  post={post} 
+                  viewMode={viewMode}
+                  onTagSelect={handleTagSelect}
+                />
               </div>
             ))}
           </div>

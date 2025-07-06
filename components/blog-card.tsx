@@ -1,19 +1,28 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Clock, Calendar, ArrowUpRight } from 'lucide-react'
+import { Clock, Calendar, ArrowUpRight, Hash, Filter } from 'lucide-react'
 import { BlogPost } from '@/types/notion'
 import { formatDateShort, getReadingTimeText, truncateText, generatePreviewText } from '@/lib/utils'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 interface BlogCardProps {
   post: BlogPost
   className?: string
   variant?: 'default' | 'featured' | 'compact'
+  viewMode?: 'grid' | 'list'
+  onTagSelect?: (tag: string) => void
 }
 
-export function BlogCard({ post, className, variant = 'default' }: BlogCardProps) {
+export function BlogCard({ 
+  post, 
+  className, 
+  variant = 'default', 
+  viewMode = 'grid',
+  onTagSelect 
+}: BlogCardProps) {
   // 글의 미리보기 텍스트 생성
   const getPreviewText = (post: BlogPost): string => {
     if (post.summary) {
@@ -40,6 +49,104 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
     return 'aspect-[4/3]'
   }
 
+  // List view component
+  if (viewMode === 'list') {
+    return (
+      <Card className={cn(
+        "group relative overflow-hidden",
+        "bg-card border border-border hover:shadow-md transition-shadow",
+        className
+      )}>
+        <Link href={`/posts/${post.slug}`} className="block p-4">
+          <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
+            {/* Mobile: Stack image and content vertically */}
+            {post.cover && (
+              <div className="w-full sm:w-24 sm:flex-shrink-0">
+                <Image
+                  src={post.cover}
+                  alt={post.title}
+                  width={400}
+                  height={240}
+                  className="w-full sm:w-24 h-40 sm:h-16 rounded object-cover"
+                />
+              </div>
+            )}
+            <div className="flex-1 min-w-0">
+              <div className="space-y-3">
+                <div className="flex-1">
+                  <h3 className="font-semibold text-base sm:text-lg mb-2 line-clamp-2 sm:line-clamp-1 group-hover:text-primary transition-colors">
+                    {post.title}
+                  </h3>
+                  <p className="text-muted-foreground text-sm mb-3 line-clamp-3 sm:line-clamp-2">
+                    {post.summary || 'No description available'}
+                  </p>
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1">
+                      <Calendar className="h-3 w-3" />
+                      <span>{formatDateShort(post.date)}</span>
+                    </div>
+                    {post.readingTime && (
+                      <div className="flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        <span>{getReadingTimeText(post.readingTime)}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {/* Tags */}
+                <div className="flex flex-wrap gap-1">
+                  {/* Show 2 tags on mobile, 3 on desktop */}
+                  {post.tags?.slice(0, 2).map((tag) => (
+                    <Button
+                      key={tag}
+                      variant="outline"
+                      size="sm"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        onTagSelect?.(tag)
+                      }}
+                      className="h-6 px-2 text-xs hover:bg-primary hover:text-primary-foreground"
+                    >
+                      <Hash className="h-3 w-3 mr-1" />
+                      {tag}
+                    </Button>
+                  ))}
+                  {/* Show 3rd tag only on sm+ screens */}
+                  {post.tags && post.tags.length > 2 && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        onTagSelect?.(post.tags[2])
+                      }}
+                      className="hidden sm:inline-flex h-6 px-2 text-xs hover:bg-primary hover:text-primary-foreground"
+                    >
+                      <Hash className="h-3 w-3 mr-1" />
+                      {post.tags[2]}
+                    </Button>
+                  )}
+                  {/* Show remaining count */}
+                  {post.tags && post.tags.length > 2 && (
+                    <span className="text-xs text-muted-foreground self-center sm:hidden">
+                      +{post.tags.length - 2} more
+                    </span>
+                  )}
+                  {post.tags && post.tags.length > 3 && (
+                    <span className="hidden sm:inline text-xs text-muted-foreground self-center">
+                      +{post.tags.length - 3} more
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Link>
+      </Card>
+    )
+  }
+
+  // Grid view component (existing)
   return (
     <Card className={cn(
       // Base styles - 단순화
