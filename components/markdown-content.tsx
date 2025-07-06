@@ -16,7 +16,7 @@ interface MarkdownContentProps {
 
 export function MarkdownContent({ content, className }: MarkdownContentProps) {
   return (
-    <div className={cn('prose max-w-none', className)}>
+    <div className={cn('markdown-content', className)}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[
@@ -28,114 +28,177 @@ export function MarkdownContent({ content, className }: MarkdownContentProps) {
             {
               behavior: 'wrap',
               properties: {
-                className: ['anchor-link'],
-              },
-            },
-          ],
+                className: 'anchor-link'
+              }
+            }
+          ]
         ]}
         components={{
-          // Headings with enhanced styling
+          // Headings
           h1: ({ children, ...props }) => (
-            <h1 {...props}>{children}</h1>
+            <h1 className="text-3xl font-bold mt-12 mb-6 first:mt-0 scroll-mt-20" {...props}>
+              {children}
+            </h1>
           ),
           h2: ({ children, ...props }) => (
-            <h2 {...props}>{children}</h2>
+            <h2 className="text-2xl font-bold mt-10 mb-5 scroll-mt-20" {...props}>
+              {children}
+            </h2>
           ),
           h3: ({ children, ...props }) => (
-            <h3 {...props}>{children}</h3>
+            <h3 className="text-xl font-semibold mt-8 mb-4 scroll-mt-20" {...props}>
+              {children}
+            </h3>
           ),
           h4: ({ children, ...props }) => (
-            <h4 {...props}>{children}</h4>
+            <h4 className="text-lg font-semibold mt-6 mb-3 scroll-mt-20" {...props}>
+              {children}
+            </h4>
           ),
           h5: ({ children, ...props }) => (
-            <h5 {...props}>{children}</h5>
+            <h5 className="text-base font-semibold mt-5 mb-3 scroll-mt-20" {...props}>
+              {children}
+            </h5>
           ),
           h6: ({ children, ...props }) => (
-            <h6 {...props}>{children}</h6>
+            <h6 className="text-sm font-semibold mt-4 mb-2 text-muted-foreground uppercase tracking-wide scroll-mt-20" {...props}>
+              {children}
+            </h6>
           ),
-          
-          // Enhanced code blocks
-          code: ({ node, inline, className, children, ...props }) => {
-            const match = /language-(\w+)/.exec(className || '')
-            const language = match ? match[1] : ''
+
+          // Paragraphs
+          p: ({ children, ...props }) => (
+            <p className="mb-6 leading-7 text-foreground last:mb-0" {...props}>
+              {children}
+            </p>
+          ),
+
+          // Links
+          a: ({ children, href, ...props }) => (
+            <a 
+              href={href}
+              className="text-primary hover:text-primary/80 underline underline-offset-4 transition-colors"
+              {...props}
+            >
+              {children}
+            </a>
+          ),
+
+          // Lists
+          ul: ({ children, ...props }) => (
+            <ul className="mb-6 space-y-2 pl-6" {...props}>
+              {children}
+            </ul>
+          ),
+          ol: ({ children, ...props }) => (
+            <ol className="mb-6 space-y-2 pl-6 list-decimal" {...props}>
+              {children}
+            </ol>
+          ),
+          li: ({ children, ...props }) => (
+            <li className="leading-7" {...props}>
+              {children}
+            </li>
+          ),
+
+          // Code
+          code: ({ children, className, ...props }: any) => {
+            const isBlock = className?.includes('language-')
             
-            if (!inline && match) {
+            if (isBlock) {
               return (
-                <div className="relative group">
-                  <pre {...props}>
-                    <code className={className}>
-                      {children}
-                    </code>
-                  </pre>
-                  {language && (
-                    <div className="absolute right-3 top-3 rounded-md bg-background/90 backdrop-blur-sm px-2 py-1 text-xs font-mono text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                      {language}
-                    </div>
-                  )}
-                  <button 
-                    className="absolute right-3 bottom-3 rounded-md bg-background/90 backdrop-blur-sm px-2 py-1 text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity hover:text-foreground"
-                    onClick={() => {
-                      if (typeof navigator !== 'undefined' && navigator.clipboard) {
-                        navigator.clipboard.writeText(String(children))
-                      }
-                    }}
-                  >
-                    Copy
-                  </button>
-                </div>
+                <code className={className} {...props}>
+                  {children}
+                </code>
               )
             }
             
-            return <code {...props}>{children}</code>
+            return (
+              <code 
+                className="px-2 py-1 text-sm bg-muted text-foreground rounded font-mono" 
+                {...props}
+              >
+                {children}
+              </code>
+            )
           },
-          
-          // Enhanced tables
+
+          // Pre (code blocks)
+          pre: ({ children, ...props }) => (
+            <pre className="mb-6 p-4 bg-muted rounded-lg overflow-x-auto border text-sm" {...props}>
+              {children}
+            </pre>
+          ),
+
+          // Blockquotes
+          blockquote: ({ children, ...props }) => (
+            <blockquote className="mb-6 pl-6 border-l-4 border-muted-foreground/20 italic text-muted-foreground" {...props}>
+              {children}
+            </blockquote>
+          ),
+
+          // Tables
           table: ({ children, ...props }) => (
-            <div className="overflow-x-auto rounded-lg border shadow-card">
-              <table {...props}>{children}</table>
+            <div className="mb-6 overflow-x-auto rounded-lg border">
+              <table className="w-full border-collapse" {...props}>
+                {children}
+              </table>
             </div>
           ),
-          
-          // Enhanced images with zoom effect
+          thead: ({ children, ...props }) => (
+            <thead className="bg-muted" {...props}>
+              {children}
+            </thead>
+          ),
+          th: ({ children, ...props }) => (
+            <th className="px-4 py-3 text-left font-semibold border-b border-border" {...props}>
+              {children}
+            </th>
+          ),
+          td: ({ children, ...props }) => (
+            <td className="px-4 py-3 border-b border-border" {...props}>
+              {children}
+            </td>
+          ),
+
+          // Images
           img: ({ src, alt, ...props }) => (
-            <figure className="group cursor-zoom-in">
-              <img src={src} alt={alt} {...props} />
-              {alt && <figcaption>{alt}</figcaption>}
-            </figure>
+            <img 
+              src={src} 
+              alt={alt} 
+              className="mb-6 w-full h-auto rounded-lg"
+              {...props} 
+            />
           ),
-          
-          // Custom callout handling
-          div: ({ children, className, ...props }) => {
-            if (className?.includes('notion-callout')) {
-              return (
-                <div className={cn('notion-callout', className)} {...props}>
-                  {children}
-                </div>
-              )
-            }
-            return <div className={className} {...props}>{children}</div>
-          },
-          
-          // Enhanced blockquotes
-          blockquote: ({ children, ...props }) => (
-            <blockquote {...props}>{children}</blockquote>
+
+          // Horizontal Rule
+          hr: ({ ...props }) => (
+            <hr className="my-8 border-0 h-px bg-border" {...props} />
           ),
-          
-          // Task list support
-          ul: ({ children, className, ...props }) => {
-            if (className?.includes('contains-task-list')) {
-              return <ul className="task-list" data-type="taskList" {...props}>{children}</ul>
-            }
-            return <ul {...props}>{children}</ul>
-          },
-          
-          // Task list items
-          li: ({ children, className, ...props }) => {
-            if (className?.includes('task-list-item')) {
-              return <li className="task-list-item" {...props}>{children}</li>
-            }
-            return <li {...props}>{children}</li>
-          },
+
+          // Strong and emphasis
+          strong: ({ children, ...props }) => (
+            <strong className="font-bold" {...props}>
+              {children}
+            </strong>
+          ),
+          em: ({ children, ...props }) => (
+            <em className="italic" {...props}>
+              {children}
+            </em>
+          ),
+
+          // Details/Summary (for collapsible content)
+          details: ({ children, ...props }) => (
+            <details className="mb-6 rounded-lg border border-border bg-card" {...props}>
+              {children}
+            </details>
+          ),
+          summary: ({ children, ...props }) => (
+            <summary className="cursor-pointer select-none rounded-t-lg bg-muted px-4 py-3 font-medium hover:bg-muted/80" {...props}>
+              {children}
+            </summary>
+          ),
         }}
       >
         {content}
