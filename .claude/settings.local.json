@@ -14,7 +14,8 @@
       "Bash(grep:*)",
       "Bash(npx tsc:*)",
       "Bash(rm:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": []
   }
