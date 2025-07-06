@@ -5,6 +5,39 @@ import { Button } from '@/components/ui/button'
 import { Suspense } from 'react'
 import { ArrowRight, Sparkles, Zap, Palette } from 'lucide-react'
 import Link from 'next/link'
+import { generateHomepageOGImageUrl, getBaseUrl } from '@/lib/og-image'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Noxion Blog - Write in Notion, Publish Beautifully',
+  description: 'Transform your Notion pages into a stunning blog. Share your thoughts, stories, and insights with the world.',
+  keywords: ['notion', 'blog', 'writing', 'publishing', 'nextjs'],
+  authors: [{ name: 'Noxion' }],
+  openGraph: {
+    title: 'Noxion Blog - Write in Notion, Publish Beautifully',
+    description: 'Transform your Notion pages into a stunning blog. Share your thoughts, stories, and insights with the world.',
+    type: 'website',
+    images: [
+      {
+        url: generateHomepageOGImageUrl(getBaseUrl()),
+        width: 1200,
+        height: 630,
+        alt: 'Noxion Blog',
+      },
+    ],
+    url: getBaseUrl(),
+    siteName: 'Noxion Blog',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Noxion Blog - Write in Notion, Publish Beautifully',
+    description: 'Transform your Notion pages into a stunning blog. Share your thoughts, stories, and insights with the world.',
+    images: [generateHomepageOGImageUrl(getBaseUrl())],
+  },
+  alternates: {
+    canonical: getBaseUrl(),
+  },
+}
 
 function LoadingSkeleton() {
   return (

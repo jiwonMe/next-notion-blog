@@ -31,19 +31,19 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
 
   const previewText = getPreviewText(post)
   
-  // Dynamic aspect ratios based on variant
+  // Consistent aspect ratios based on variant
   const getAspectRatio = () => {
     if (variant === 'featured') return 'aspect-[16/10]'
     if (variant === 'compact') return 'aspect-[4/3]'
     
-    const aspectRatios = ['aspect-[4/3]', 'aspect-[3/4]', 'aspect-[16/9]', 'aspect-[1/1]']
-    return aspectRatios[Math.floor(Math.random() * aspectRatios.length)]
+    // Use consistent aspect ratio for grid layout
+    return 'aspect-[4/3]'
   }
 
   return (
     <Card className={cn(
       // Base styles - 단순화
-      "group relative overflow-hidden",
+      "group relative overflow-hidden flex flex-col",
       "bg-card border border-border",
       "shadow-sm hover:shadow-lg",
       "transition-all duration-300 ease-out",
@@ -55,36 +55,58 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
       
       className
     )}>
-      <Link href={`/posts/${post.slug}`} className="block">
-        {/* Cover Image */}
-        {post.cover && (
-          <div className={cn(
-            "relative overflow-hidden",
-            getAspectRatio()
-          )}>
-            <Image
-              src={post.cover}
-              alt={post.title}
-              fill
-              className={cn(
-                "object-cover transition-transform duration-500",
-                "group-hover:scale-105"
-              )}
-              placeholder="blur"
-              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyEnyLlNZFHdHFJ2YRnYLuSxIjfBxVGdTsHfE7PUQEhLu1nJQEQGnIKoQHJ2sNRwQJcMIvNYzFJsqQBXjJXYBCNRQhqQcVxNTFQvzFJQNHuQWGLPkKJCQbPIiNMGQSLMUlhqMAQx8NJDgIkFCpNSGHQLz0+nS5cxrYg3VfgmxVsNxWEcIVIkFhHN5EyOQVcUGQqLYbGSDIyTWAAVJhRFmNMIbGbdKYEIqCBEJRSAAhbwfMRvIXCvAEWoEuJQCRAFJJBFABqBqOiD4qBIEFYCqKAjOgAwKMGBLNiGLKGFgYPAVMGQWpHaAAVFCbKvQk2NhPJ2TRZgEDUYn2CjSzLSAEU9MBOGgAIwEEAkEEAAKEAR0XMSfGRiIBEtlXUWBBYCkWVJgIBTBhUjUt0QJgIJBJOSYGjBIQSGAmhgMCSGEwAKByQa2BdXKGAIBFhGCNTKxRAcCCKCAaB0hXLRXJGLRoJGwQlVMIQEEFyqEEAEFhCKBEGCJyIBZkVAaYLGKGBMRNQhcjIgJnFACwGAMGBOOAyKEgAJJIAD//2Q=="
-            />
-            
-            {/* 간단한 gradient overlay */}
+      <Link href={`/posts/${post.slug}`} className="block flex flex-col h-full">
+        {/* Cover Image or Placeholder */}
+        <div className={cn(
+          "relative overflow-hidden flex-shrink-0",
+          getAspectRatio()
+        )}>
+          {post.cover ? (
+            <>
+              <Image
+                src={post.cover}
+                alt={post.title}
+                fill
+                className={cn(
+                  "object-cover transition-transform duration-500",
+                  "group-hover:scale-105"
+                )}
+                placeholder="blur"
+                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyEnyLlNZFHdHFJ2YRnYLuSxIjfBxVGdTsHfE7PUQEhLu1nJQEQGnIKoQHJ2sNRwQJcMIvNYzFJsqQBXjJXYBCNRQhqQcVxNTFQvzFJQNHuQWGLPkKJCQbPIiNMGQSLMUlhqMAQx8NJDgIkFCpNSGHQLz0+nS5cxrYg3VfgmxVsNxWEcIVIkFhHN5EyOQVcUGQqLYbGSDIyTWAAVJhRFmNMIbGbdKYEIqCBEJRSAAhbwfMRvIXCvAEWoEuJQCRAFJJBFABqBqOiD4qBIEFYCqKAjOgAwKMGBLNiGLKGFgYPAVMGQWpHaAAVFCbKvQk2NhPJ2TRZgEDUYn2CjSzLSAEU9MBOGgAIwEEAkEEAAKEAR0XMSfGRiIBEtlXUWBBYCkWVJgIBTBhUjUt0QJgIJBJOSYGjBIQSGAmhgMCSGEwAKByQa2BdXKGAIBFhGCNTKxRAcCCKCAaB0hXLRXJGLRoJGwQlVMIQEEFyqEEAEFhCKBEGCJyIBZkVAaYLGKGBMRNQhcjIgJnFACwGAMGBOOAyKEgAJJIAD//2Q=="
+              />
+              {/* 간단한 gradient overlay */}
+              <div className={cn(
+                "absolute inset-0",
+                "bg-gradient-to-t from-black/20 to-transparent",
+                "opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              )} />
+            </>
+          ) : (
+            /* Placeholder for posts without cover image */
             <div className={cn(
-              "absolute inset-0",
-              "bg-gradient-to-t from-black/20 to-transparent",
-              "opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            )} />
-          </div>
-        )}
+              "w-full h-full flex items-center justify-center",
+              "bg-gradient-to-br from-muted via-muted/50 to-muted",
+              "group-hover:from-muted/80 group-hover:via-muted/30 group-hover:to-muted/80",
+              "transition-all duration-500"
+            )}>
+              <div className="text-center p-6">
+                <div className={cn(
+                  "w-12 h-12 mx-auto mb-3 rounded-full",
+                  "bg-primary/10 flex items-center justify-center",
+                  "group-hover:bg-primary/20 transition-colors duration-300"
+                )}>
+                  <ArrowUpRight className="h-6 w-6 text-primary/60" />
+                </div>
+                <p className="text-xs text-muted-foreground font-medium">
+                  {post.tags[0] || 'Article'}
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
         
         <CardContent className={cn(
-          "p-5 space-y-4",
+          "p-5 space-y-4 flex-1 flex flex-col",
           variant === 'compact' && "p-4 space-y-3"
         )}>
           
@@ -111,7 +133,7 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
           </div>
           
           {/* Title and Preview */}
-          <div className="space-y-3">
+          <div className="space-y-3 flex-1">
             <h3 className={cn(
               "font-bold leading-tight",
               "group-hover:text-primary transition-colors duration-200",

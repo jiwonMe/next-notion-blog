@@ -5,8 +5,8 @@ import { formatDate, getReadingTimeText } from '@/lib/utils'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { generateMetadata as generateMeta } from '@/lib/utils'
 import { cn } from '@/lib/utils'
+import { generatePostOGMetadata, generateTwitterMetadata, getBaseUrl } from '@/lib/og-image'
 
 interface PageProps {
   params: {
@@ -29,12 +29,31 @@ export async function generateMetadata({ params }: PageProps) {
     }
   }
 
-  return generateMeta(
-    post.title,
-    post.summary || `Read ${post.title} on Noxion`,
-    post.cover,
-    `/posts/${post.slug}`
-  )
+  const baseUrl = getBaseUrl()
+  const ogMetadata = generatePostOGMetadata(post, baseUrl)
+  const twitterMetadata = generateTwitterMetadata(post, baseUrl)
+
+  return {
+    title: post.title,
+    description: post.summary || `Read ${post.title} on Noxion`,
+    keywords: post.tags?.join(', '),
+    authors: [{ name: 'Noxion' }],
+    openGraph: {
+      title: post.title,
+      description: ogMetadata.description,
+      type: 'article',
+      publishedTime: post.date,
+      modifiedTime: post.lastEditedTime,
+      tags: post.tags,
+      images: ogMetadata.images,
+      url: `${baseUrl}/posts/${post.slug}`,
+      siteName: 'Noxion Blog',
+    },
+    twitter: twitterMetadata,
+    alternates: {
+      canonical: `${baseUrl}/posts/${post.slug}`,
+    },
+  }
 }
 
 export default async function PostPage({ params }: PageProps) {

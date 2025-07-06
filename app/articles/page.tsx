@@ -2,6 +2,47 @@ import { getDatabasePages } from '@/lib/notion'
 import { ArticlesFilter } from '@/components/articles-filter'
 import { Search } from 'lucide-react'
 import { Suspense } from 'react'
+import { generateOGImageUrl, getBaseUrl } from '@/lib/og-image'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'All Articles | Noxion Blog',
+  description: 'Browse all articles and blog posts from our Notion-powered blog. Discover insights, tutorials, and stories.',
+  keywords: ['articles', 'blog posts', 'tutorials', 'insights'],
+  authors: [{ name: 'Noxion' }],
+  openGraph: {
+    title: 'All Articles | Noxion Blog',
+    description: 'Browse all articles and blog posts from our Notion-powered blog. Discover insights, tutorials, and stories.',
+    type: 'website',
+    images: [
+      {
+        url: generateOGImageUrl({
+          title: 'All Articles',
+          description: 'Browse all articles and blog posts from our Notion-powered blog',
+          type: 'homepage'
+        }, getBaseUrl()),
+        width: 1200,
+        height: 630,
+        alt: 'All Articles - Noxion Blog',
+      },
+    ],
+    url: `${getBaseUrl()}/articles`,
+    siteName: 'Noxion Blog',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'All Articles | Noxion Blog',
+    description: 'Browse all articles and blog posts from our Notion-powered blog. Discover insights, tutorials, and stories.',
+    images: [generateOGImageUrl({
+      title: 'All Articles',
+      description: 'Browse all articles and blog posts from our Notion-powered blog',
+      type: 'homepage'
+    }, getBaseUrl())],
+  },
+  alternates: {
+    canonical: `${getBaseUrl()}/articles`,
+  },
+}
 
 function LoadingSkeleton() {
   return (
@@ -118,7 +159,3 @@ export default function ArticlesPage() {
   )
 }
 
-export const metadata = {
-  title: 'All Articles | Noxion',
-  description: 'Browse all articles and blog posts from our Notion-powered blog',
-}
