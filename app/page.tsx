@@ -3,8 +3,9 @@ import { BlogCard } from '@/components/blog-card'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Suspense } from 'react'
-import { ArrowRight, Sparkles, Zap, Palette } from 'lucide-react'
+import { ArrowRight, Sparkles, Zap, Palette, Clock, Calendar, Github, Twitter, Linkedin, Mail, User, Users, Coffee, Code, BookOpen } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { generateHomepageOGImageUrl, getBaseUrl } from '@/lib/og-image'
 import { Metadata } from 'next'
 
@@ -66,6 +67,68 @@ function LoadingSkeleton() {
   )
 }
 
+function HeroSkeleton() {
+  return (
+    <section className="relative overflow-hidden py-12 sm:py-16 lg:py-20">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          <div className="lg:col-span-7 space-y-8">
+            <div className="space-y-6">
+              <div className="h-8 w-32 bg-muted rounded-full animate-pulse"></div>
+              <div className="space-y-4">
+                <div className="h-16 w-full bg-muted rounded animate-pulse"></div>
+                <div className="h-16 w-4/5 bg-muted rounded animate-pulse"></div>
+              </div>
+              <div className="space-y-2">
+                <div className="h-6 w-full bg-muted rounded animate-pulse"></div>
+                <div className="h-6 w-3/4 bg-muted rounded animate-pulse"></div>
+              </div>
+              <div className="flex gap-4">
+                <div className="h-12 w-32 bg-muted rounded animate-pulse"></div>
+                <div className="h-12 w-24 bg-muted rounded animate-pulse"></div>
+              </div>
+            </div>
+          </div>
+          <div className="lg:col-span-5">
+            <div className="bg-muted rounded-2xl p-6 animate-pulse">
+              <div className="aspect-[16/10] bg-muted-foreground/20 rounded-lg mb-4"></div>
+              <div className="space-y-3">
+                <div className="h-4 w-1/3 bg-muted-foreground/20 rounded"></div>
+                <div className="h-6 w-full bg-muted-foreground/20 rounded"></div>
+                <div className="h-4 w-5/6 bg-muted-foreground/20 rounded"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function TopicsSkeleton() {
+  return (
+    <section className="py-16 lg:py-24">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <div className="h-10 w-64 bg-muted rounded mx-auto mb-4 animate-pulse"></div>
+          <div className="h-6 w-96 bg-muted rounded mx-auto animate-pulse"></div>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="p-6 bg-muted rounded-xl animate-pulse">
+              <div className="text-center space-y-3">
+                <div className="w-12 h-12 mx-auto bg-muted-foreground/20 rounded-full"></div>
+                <div className="h-4 w-16 bg-muted-foreground/20 rounded mx-auto"></div>
+                <div className="h-3 w-12 bg-muted-foreground/20 rounded mx-auto"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 async function BlogPosts() {
   const posts = await getDatabasePages()
 
@@ -116,50 +179,174 @@ async function BlogPosts() {
   )
 }
 
-function HeroSection() {
+async function HeroSection() {
+  const posts = await getDatabasePages()
+  const recentPosts = posts.slice(0, 3)
+
   return (
-    <section className="relative overflow-hidden py-16 lg:py-24">
-      {/* Background Elements */}
-      <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-gradient-to-r from-primary/20 to-transparent rounded-full blur-3xl animate-float"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-l from-primary/10 to-transparent rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }}></div>
+    <section className="relative min-h-screen flex items-center overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.02] via-transparent to-primary/[0.02]"></div>
       
-      <div className="relative container mx-auto max-w-screen-xl px-6 text-center">
-        <div className="animate-fade-in">
-          <div className="mb-8 flex justify-center">
-            <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-sm font-medium">
-              <Sparkles className="h-4 w-4 text-primary" />
-              <span>Powered by Notion & Next.js</span>
+      <div className="relative container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center min-h-[calc(100vh-4rem)]">
+          
+          {/* Left Column - Main Content */}
+          <div className="space-y-8 text-center lg:text-left">
+            {/* Avatar & Status */}
+            <div className="flex justify-center lg:justify-start">
+              <div className="relative">
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-primary/10 flex items-center justify-center">
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
+                    <User className="w-7 h-7 text-primary-foreground" />
+                  </div>
+                </div>
+                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-background flex items-center justify-center">
+                  <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Main Heading */}
+            <div className="space-y-4">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
+                Hello, I'm a <span className="gradient-text">Developer</span>
+              </h1>
+              <p className="text-xl sm:text-2xl text-muted-foreground font-light max-w-2xl mx-auto lg:mx-0">
+                Sharing code, ideas, and experiences
+              </p>
+            </div>
+
+            {/* Skills & Status */}
+            <div className="space-y-4">
+              <div className="flex flex-wrap justify-center lg:justify-start gap-2">
+                {['React', 'Next.js', 'TypeScript', 'Node.js'].map((skill) => (
+                  <span
+                    key={skill}
+                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary border border-primary/20"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+              
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-muted/50 rounded-full text-sm">
+                <Coffee className="w-4 h-4 text-primary" />
+                <span className="text-muted-foreground">Currently working on</span>
+                <span className="font-medium">Next.js Projects</span>
+              </div>
+            </div>
+
+            {/* Stats */}
+            <div className="flex justify-center lg:justify-start gap-8">
+              <div className="text-center lg:text-left">
+                <div className="text-2xl font-bold">{posts.length}</div>
+                <div className="text-sm text-muted-foreground">Articles</div>
+              </div>
+              <div className="text-center lg:text-left">
+                <div className="text-2xl font-bold">
+                  {Array.from(new Set(posts.flatMap(post => post.tags || []))).length}
+                </div>
+                <div className="text-sm text-muted-foreground">Topics</div>
+              </div>
+              <div className="text-center lg:text-left">
+                <div className="text-2xl font-bold">2024</div>
+                <div className="text-sm text-muted-foreground">Since</div>
+              </div>
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+              <Button size="lg" asChild className="group">
+                <Link href="/articles">
+                  <BookOpen className="w-4 h-4 mr-2" />
+                  View Articles
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </Button>
+              <Button variant="outline" size="lg" asChild>
+                <Link href="/about">
+                  <User className="w-4 h-4 mr-2" />
+                  About Me
+                </Link>
+              </Button>
+            </div>
+
+            {/* Social Links */}
+            <div className="flex justify-center lg:justify-start gap-3">
+              <Button variant="ghost" size="sm" className="group">
+                <Github className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
+                GitHub
+              </Button>
+              <Button variant="ghost" size="sm" className="group">
+                <Twitter className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
+                Twitter
+              </Button>
+              <Button variant="ghost" size="sm" className="group">
+                <Mail className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
+                Contact
+              </Button>
             </div>
           </div>
-          
-          <h1 className="mb-8 text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl xl:text-8xl">
-            Write in{' '}
-            <span className="relative">
-              <span className="gradient-text">Notion</span>
-              <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 to-primary/10 rounded-2xl blur-xl -z-10"></div>
-            </span>
-            <br />
-            Publish{' '}
-            <span className="gradient-text animate-gradient bg-gradient-to-r from-primary via-primary/80 to-primary">
-              Beautifully
-            </span>
-          </h1>
-          
-          <p className="mx-auto mb-12 max-w-3xl text-lg text-muted-foreground lg:text-xl leading-relaxed">
-            Transform your Notion pages into a stunning blog. No coding required, 
-            just pure creativity. Share your thoughts, stories, and insights with the world.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button size="lg" className="shadow-primary group">
-              Get Started
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-            <Button variant="outline" size="lg" asChild>
-              <Link href="/about">
-                Learn More
-              </Link>
-            </Button>
+
+          {/* Right Column - Recent Posts Preview */}
+          <div className="space-y-6">
+            <div className="text-center lg:text-left">
+              <h2 className="text-2xl font-bold mb-2">Latest Articles</h2>
+              <p className="text-muted-foreground">Recent insights and tutorials</p>
+            </div>
+
+            <div className="space-y-4">
+              {recentPosts.map((post, index) => (
+                <Link
+                  key={post.id}
+                  href={`/posts/${post.slug}`}
+                  className="block group"
+                >
+                  <div className="p-4 bg-card border border-border rounded-lg hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <div className="flex items-start gap-3">
+                      {post.cover && (
+                        <Image
+                          src={post.cover}
+                          alt=""
+                          width={60}
+                          height={60}
+                          className="w-15 h-15 rounded object-cover flex-shrink-0"
+                        />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-sm line-clamp-2 group-hover:text-primary transition-colors">
+                          {post.title}
+                        </h3>
+                        <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                          {post.summary || 'Click to read this article...'}
+                        </p>
+                        <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+                          <Calendar className="h-3 w-3" />
+                          <span>{new Date(post.date).toLocaleDateString()}</span>
+                          {post.readingTime && (
+                            <>
+                              <span>•</span>
+                              <Clock className="h-3 w-3" />
+                              <span>{post.readingTime}m read</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            <div className="text-center lg:text-right">
+              <Button variant="outline" asChild>
+                <Link href="/articles">
+                  View All Articles
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -167,52 +354,146 @@ function HeroSection() {
   )
 }
 
-function FeaturesSection() {
-  const features = [
-    {
-      icon: Zap,
-      title: "Lightning Fast",
-      description: "Built with Next.js 14 and optimized for performance"
-    },
-    {
-      icon: Palette,
-      title: "Beautiful Design",
-      description: "Modern, responsive design that adapts to any screen"
-    },
-    {
-      icon: Sparkles,
-      title: "Easy to Use",
-      description: "Write in Notion, publish automatically"
-    }
-  ]
+async function AboutSection() {
+  const posts = await getDatabasePages()
+  const recentPosts = posts.slice(0, 3)
 
   return (
-    <section className="py-24 bg-gradient-to-b from-muted/50 to-transparent">
-      <div className="container mx-auto max-w-screen-xl px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold mb-4">Why Choose Noxion?</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            The perfect blend of simplicity and power for modern content creators
-          </p>
-        </div>
-        
-        <div className="grid md:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <div 
-              key={feature.title}
-              className="text-center group animate-slide-up"
-              style={{ animationDelay: `${index * 200}ms` }}
-            >
-              <div className="mb-6 relative">
-                <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 to-primary/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="relative mx-auto w-16 h-16 bg-gradient-to-r from-primary to-primary/80 rounded-2xl flex items-center justify-center shadow-primary">
-                  <feature.icon className="h-8 w-8 text-primary-foreground" />
+    <section className="py-16 lg:py-20">
+      <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+          
+          {/* About Content */}
+          <div className="space-y-8 animate-fade-in">
+            <div className="space-y-6">
+              <h2 className="text-3xl sm:text-4xl font-bold">
+                About <span className="gradient-text">Me</span>
+              </h2>
+              
+              <div className="prose prose-lg text-muted-foreground max-w-none">
+                <p>
+                  안녕하세요! 저는 웹 개발과 기술에 열정을 가진 개발자입니다. 
+                  복잡한 문제를 해결하고, 사용자 경험을 개선하는 일에 보람을 느낍니다.
+                </p>
+                <p>
+                  주로 <strong>React</strong>, <strong>Next.js</strong>, <strong>TypeScript</strong>를 
+                  사용해 프론트엔드를 개발하며, 백엔드와 인프라에도 관심이 많습니다.
+                </p>
+              </div>
+
+              {/* Skills */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold">주요 기술 스택</h3>
+                <div className="flex flex-wrap gap-2">
+                  {['React', 'Next.js', 'TypeScript', 'Node.js', 'Tailwind CSS', 'Prisma', 'PostgreSQL'].map((skill) => (
+                    <span
+                      key={skill}
+                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary"
+                    >
+                      {skill}
+                    </span>
+                  ))}
                 </div>
               </div>
-              <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-              <p className="text-muted-foreground">{feature.description}</p>
+
+              {/* Current Focus */}
+              <div className="p-6 bg-muted/50 rounded-2xl border border-border/50">
+                <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <Code className="w-5 h-5 text-primary" />
+                  현재 집중하고 있는 것들
+                </h3>
+                <ul className="space-y-2 text-muted-foreground">
+                  <li className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                    Next.js 14와 Server Actions 탐구
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                    AI/ML과 웹 개발의 융합
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-purple-500"></div>
+                    오픈소스 프로젝트 기여
+                  </li>
+                </ul>
+              </div>
             </div>
-          ))}
+          </div>
+
+          {/* Recent Posts */}
+          <div className="space-y-8 animate-slide-up" style={{ animationDelay: '200ms' }}>
+            <div className="space-y-6">
+              <h2 className="text-3xl sm:text-4xl font-bold">
+                Recent <span className="gradient-text">Posts</span>
+              </h2>
+              
+              <div className="space-y-6">
+                {recentPosts.map((post, index) => (
+                  <article
+                    key={post.id}
+                    className="group p-6 bg-card border border-border rounded-xl hover:shadow-lg transition-all duration-300"
+                  >
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Calendar className="w-4 h-4" />
+                        <time dateTime={post.date}>
+                          {new Date(post.date).toLocaleDateString('ko-KR', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
+                        </time>
+                        {post.readingTime && (
+                          <>
+                            <span>•</span>
+                            <span>{post.readingTime}분 읽기</span>
+                          </>
+                        )}
+                      </div>
+                      
+                      <h3 className="text-xl font-semibold leading-tight group-hover:text-primary transition-colors">
+                        <Link href={`/posts/${post.slug}`}>
+                          {post.title}
+                        </Link>
+                      </h3>
+                      
+                      <p className="text-muted-foreground line-clamp-2">
+                        {post.summary || '흥미로운 내용을 담고 있는 글입니다...'}
+                      </p>
+                      
+                      <div className="flex items-center justify-between pt-2">
+                        <div className="flex flex-wrap gap-1">
+                          {post.tags?.slice(0, 2).map((tag) => (
+                            <span
+                              key={tag}
+                              className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-muted text-muted-foreground"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                        <Button variant="ghost" size="sm" asChild>
+                          <Link href={`/posts/${post.slug}`}>
+                            읽기
+                            <ArrowRight className="ml-1 w-3 h-3" />
+                          </Link>
+                        </Button>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+
+              <div className="text-center">
+                <Button variant="outline" asChild>
+                  <Link href="/articles">
+                    모든 글 보기
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -222,23 +503,9 @@ function FeaturesSection() {
 export default function Home() {
   return (
     <div className="min-h-screen">
-      <HeroSection />
-      <FeaturesSection />
-      
-      <section className="py-24">
-        <div className="container mx-auto max-w-screen-xl px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4 gradient-text">Latest Posts</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Discover the latest insights, tutorials, and stories from our community
-            </p>
-          </div>
-          
-          <Suspense fallback={<LoadingSkeleton />}>
-            <BlogPosts />
-          </Suspense>
-        </div>
-      </section>
+      <Suspense fallback={<HeroSkeleton />}>
+        <HeroSection />
+      </Suspense>
     </div>
   )
 }
