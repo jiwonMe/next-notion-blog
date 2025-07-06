@@ -108,29 +108,60 @@ export function ArticlesFilter({ posts }: ArticlesFilterProps) {
           onTagSelect={handleTagSelect}
         />
 
-        {/* Advanced Filter Controls */}
-        <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-muted/30 rounded-lg border">
-          <div className="flex flex-wrap items-center gap-4">
-            {/* Sort Options */}
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-muted-foreground">Sort by:</span>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as 'date' | 'title' | 'popularity')}
-                className="px-3 py-1.5 bg-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
-              >
-                <option value="date">Latest First</option>
-                <option value="title">A-Z</option>
-                <option value="popularity">Popular Tags</option>
-              </select>
+        {/* Advanced Filter Controls - Mobile Optimized */}
+        <div className="space-y-4 p-4 bg-muted/30 rounded-lg border">
+          {/* Mobile: Stack controls vertically */}
+          <div className="block sm:hidden space-y-4">
+            {/* Top Row: Sort and View Mode */}
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 flex-1">
+                <span className="text-xs font-medium text-muted-foreground whitespace-nowrap">Sort:</span>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as 'date' | 'title' | 'popularity')}
+                  className="flex-1 px-2 py-1.5 bg-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                >
+                  <option value="date">Latest First</option>
+                  <option value="title">A-Z</option>
+                  <option value="popularity">Popular Tags</option>
+                </select>
+              </div>
+              
+              {/* View Mode Toggle - Mobile */}
+              <div className="flex items-center border rounded-md">
+                <Button
+                  variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('grid')}
+                  className="rounded-r-none border-r h-8 px-2"
+                >
+                  <Grid className="h-3 w-3" />
+                </Button>
+                <Button
+                  variant={viewMode === 'list' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('list')}
+                  className="rounded-l-none h-8 px-2"
+                >
+                  <List className="h-3 w-3" />
+                </Button>
+              </div>
             </div>
 
-            {/* Quick Tag Filters */}
+            {/* Mobile Quick Filters */}
             {allTags.length > 0 && (
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-muted-foreground">Quick filters:</span>
-                <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-hide max-w-md">
-                  {allTags.slice(0, 5).map((tag) => {
+              <div className="space-y-2">
+                <span className="text-xs font-medium text-muted-foreground">Quick filters:</span>
+                <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-hide -mx-1 px-1">
+                  <Button
+                    variant={!selectedTag ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedTag(null)}
+                    className="whitespace-nowrap text-xs h-7 px-2 flex-shrink-0"
+                  >
+                    All
+                  </Button>
+                  {allTags.slice(0, 6).map((tag) => {
                     const isSelected = selectedTag === tag
                     const tagCount = posts.filter(p => p.tags?.includes(tag)).length
                     return (
@@ -139,7 +170,7 @@ export function ArticlesFilter({ posts }: ArticlesFilterProps) {
                         variant={isSelected ? "default" : "outline"}
                         size="sm"
                         onClick={() => setSelectedTag(isSelected ? null : tag)}
-                        className="whitespace-nowrap text-xs h-7 px-2"
+                        className="whitespace-nowrap text-xs h-7 px-2 flex-shrink-0"
                       >
                         <Hash className="h-3 w-3 mr-1" />
                         {tag}
@@ -150,41 +181,99 @@ export function ArticlesFilter({ posts }: ArticlesFilterProps) {
                 </div>
               </div>
             )}
-          </div>
 
-          <div className="flex items-center gap-2">
-            {/* View Mode Toggle */}
-            <div className="flex items-center border rounded-md">
-              <Button
-                variant={viewMode === 'grid' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewMode('grid')}
-                className="rounded-r-none border-r h-8 px-2"
-              >
-                <Grid className="h-3 w-3" />
-              </Button>
-              <Button
-                variant={viewMode === 'list' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewMode('list')}
-                className="rounded-l-none h-8 px-2"
-              >
-                <List className="h-3 w-3" />
-              </Button>
-            </div>
-
-            {/* Clear Filters */}
+            {/* Clear Filters - Mobile */}
             {activeFiltersCount > 0 && (
               <Button
                 variant="outline"
                 size="sm"
                 onClick={clearFilters}
-                className="h-8 px-3"
+                className="w-full h-8"
               >
-                <X className="h-3 w-3 mr-1" />
-                Clear ({activeFiltersCount})
+                <X className="h-3 w-3 mr-2" />
+                Clear All Filters ({activeFiltersCount})
               </Button>
             )}
+          </div>
+
+          {/* Desktop: Horizontal layout */}
+          <div className="hidden sm:flex sm:flex-wrap sm:items-center sm:justify-between sm:gap-4">
+            <div className="flex flex-wrap items-center gap-4">
+              {/* Sort Options */}
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-muted-foreground">Sort by:</span>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as 'date' | 'title' | 'popularity')}
+                  className="px-3 py-1.5 bg-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                >
+                  <option value="date">Latest First</option>
+                  <option value="title">A-Z</option>
+                  <option value="popularity">Popular Tags</option>
+                </select>
+              </div>
+
+              {/* Quick Tag Filters */}
+              {allTags.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-muted-foreground">Quick filters:</span>
+                  <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-hide max-w-md">
+                    {allTags.slice(0, 5).map((tag) => {
+                      const isSelected = selectedTag === tag
+                      const tagCount = posts.filter(p => p.tags?.includes(tag)).length
+                      return (
+                        <Button
+                          key={tag}
+                          variant={isSelected ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setSelectedTag(isSelected ? null : tag)}
+                          className="whitespace-nowrap text-xs h-7 px-2"
+                        >
+                          <Hash className="h-3 w-3 mr-1" />
+                          {tag}
+                          <span className="ml-1 text-xs opacity-70">({tagCount})</span>
+                        </Button>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2">
+              {/* View Mode Toggle */}
+              <div className="flex items-center border rounded-md">
+                <Button
+                  variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('grid')}
+                  className="rounded-r-none border-r h-8 px-2"
+                >
+                  <Grid className="h-3 w-3" />
+                </Button>
+                <Button
+                  variant={viewMode === 'list' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('list')}
+                  className="rounded-l-none h-8 px-2"
+                >
+                  <List className="h-3 w-3" />
+                </Button>
+              </div>
+
+              {/* Clear Filters */}
+              {activeFiltersCount > 0 && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={clearFilters}
+                  className="h-8 px-3"
+                >
+                  <X className="h-3 w-3 mr-1" />
+                  Clear ({activeFiltersCount})
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -241,11 +330,11 @@ export function ArticlesFilter({ posts }: ArticlesFilterProps) {
             </div>
           </div>
         ) : (
-          /* Article Grid/List */
+          /* Article Grid/List - Mobile Optimized */
           <div className={cn(
             "transition-all duration-300",
             viewMode === 'grid' 
-              ? "grid gap-6 md:grid-cols-2 lg:grid-cols-3" 
+              ? "grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" 
               : "space-y-4"
           )}>
             {filteredPosts.map((post, index) => (
@@ -260,19 +349,22 @@ export function ArticlesFilter({ posts }: ArticlesFilterProps) {
                 {viewMode === 'grid' ? (
                   <BlogCard post={post} />
                 ) : (
-                  /* List View */
-                  <div className="flex items-start gap-4">
+                  /* List View - Mobile Optimized */
+                  <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
+                    {/* Mobile: Stack image and content vertically */}
                     {post.cover && (
-                      <img
-                        src={post.cover}
-                        alt=""
-                        className="w-24 h-16 rounded object-cover flex-shrink-0"
-                      />
+                      <div className="w-full sm:w-24 sm:flex-shrink-0">
+                        <img
+                          src={post.cover}
+                          alt=""
+                          className="w-full sm:w-24 h-40 sm:h-16 rounded object-cover"
+                        />
+                      </div>
                     )}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-4">
+                      <div className="space-y-3">
                         <div className="flex-1">
-                          <h3 className="font-semibold text-lg mb-2 line-clamp-1">
+                          <h3 className="font-semibold text-base sm:text-lg mb-2 line-clamp-2 sm:line-clamp-1">
                             <a 
                               href={`/posts/${post.slug}`}
                               className="hover:text-primary transition-colors"
@@ -280,10 +372,10 @@ export function ArticlesFilter({ posts }: ArticlesFilterProps) {
                               {post.title}
                             </a>
                           </h3>
-                          <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
+                          <p className="text-muted-foreground text-sm mb-3 line-clamp-3 sm:line-clamp-2">
                             {post.summary || 'No description available'}
                           </p>
-                          <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                          <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs text-muted-foreground">
                             <div className="flex items-center gap-1">
                               <Calendar className="h-3 w-3" />
                               <span>{new Date(post.date).toLocaleDateString()}</span>
@@ -296,8 +388,10 @@ export function ArticlesFilter({ posts }: ArticlesFilterProps) {
                             )}
                           </div>
                         </div>
+                        {/* Mobile: Move tags below content */}
                         <div className="flex flex-wrap gap-1">
-                          {post.tags?.slice(0, 3).map((tag) => (
+                          {/* Show 2 tags on mobile, 3 on desktop */}
+                          {post.tags?.slice(0, 2).map((tag) => (
                             <Button
                               key={tag}
                               variant="outline"
@@ -308,6 +402,28 @@ export function ArticlesFilter({ posts }: ArticlesFilterProps) {
                               {tag}
                             </Button>
                           ))}
+                          {/* Show 3rd tag only on sm+ screens */}
+                          {post.tags && post.tags.length > 2 && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setSelectedTag(post.tags[2])}
+                              className="hidden sm:inline-flex h-6 px-2 text-xs"
+                            >
+                              {post.tags[2]}
+                            </Button>
+                          )}
+                          {/* Show remaining count */}
+                          {post.tags && post.tags.length > 2 && (
+                            <span className="text-xs text-muted-foreground self-center sm:hidden">
+                              +{post.tags.length - 2} more
+                            </span>
+                          )}
+                          {post.tags && post.tags.length > 3 && (
+                            <span className="hidden sm:inline text-xs text-muted-foreground self-center">
+                              +{post.tags.length - 3} more
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>

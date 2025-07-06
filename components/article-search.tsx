@@ -107,40 +107,47 @@ export function ArticleSearch({
 
   return (
     <>
-      {/* Search Trigger Button */}
+      {/* Search Trigger Button - Mobile Optimized */}
       <div className="relative max-w-2xl mx-auto">
         <Button
           variant="outline"
           onClick={triggerSearch}
           className={cn(
-            "w-full justify-between h-12 px-4 py-2",
+            "w-full justify-between px-4 py-2",
+            "h-12 sm:h-12", // Consistent height
             "text-muted-foreground hover:text-foreground",
             "border-border hover:border-ring",
             "transition-colors"
           )}
         >
           <div className="flex items-center gap-3">
-            <Search className="h-4 w-4" />
-            <span className="text-base">
+            <Search className="h-4 w-4 flex-shrink-0" />
+            <span className="text-sm sm:text-base truncate">
               {searchTerm || 'Search articles...'}
             </span>
           </div>
-          <div className="flex items-center gap-1 text-xs">
+          {/* Hide keyboard shortcut on mobile */}
+          <div className="hidden sm:flex items-center gap-1 text-xs">
             <CommandIcon className="h-3 w-3" />
             <span>K</span>
           </div>
+          {/* Show search icon on mobile instead */}
+          <div className="flex sm:hidden">
+            <Search className="h-4 w-4 text-muted-foreground" />
+          </div>
         </Button>
         
-        {/* Selected tag indicator */}
+        {/* Selected tag indicator - Mobile Optimized */}
         {selectedTag && (
-          <div className="absolute -bottom-8 left-0 flex items-center gap-2">
+          <div className="absolute -bottom-8 left-0 right-0 flex flex-wrap items-center gap-2">
             <span className="text-xs text-muted-foreground">Filtered by:</span>
             <div className="flex items-center gap-1 px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">
               <Hash className="h-3 w-3" />
-              <span>{selectedTag}</span>
+              <span className="max-w-[120px] truncate">{selectedTag}</span>
               <button
                 onClick={() => onTagSelect(null)}
-                className="ml-1 hover:bg-primary/20 rounded-full p-0.5"
+                className="ml-1 hover:bg-primary/20 rounded-full p-0.5 flex-shrink-0"
+                aria-label="Remove filter"
               >
                 ×
               </button>
