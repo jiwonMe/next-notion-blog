@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Run ESLint
+        run: pnpm lint
+      - name: Run TypeScript checks
+        run: pnpm type-check
+      - name: Build Next.js site
+        run: pnpm build
+      - name: Dependency Security Audit
+        run: pnpm audit --audit-level=moderate 

@@ -1,7 +1,30 @@
 {
   "name": "noxion",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "description": "A modern, fast, and beautiful blog platform powered by Notion and Next.js 14",
+  "author": "Noxion Team",
+  "license": "MIT",
+  "homepage": "https://github.com/your-username/noxion#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/noxion.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/noxion/issues"
+  },
+  "keywords": [
+    "notion",
+    "blog",
+    "nextjs",
+    "react",
+    "typescript",
+    "markdown",
+    "cms",
+    "static-site-generator",
+    "tailwindcss",
+    "notion-api"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
