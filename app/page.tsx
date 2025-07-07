@@ -8,6 +8,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { generateHomepageMetadata } from '@/lib/metadata'
 import { HeroSkeleton, BlogCardSkeleton } from '@/components/ui/skeletons'
+import { siteConfig } from '@/site.config'
 
 export const metadata = generateHomepageMetadata()
 
@@ -208,20 +209,54 @@ async function HeroSection() {
             </div>
 
             {/* Social Links */}
-            <div className="flex justify-center lg:justify-start gap-3">
-              <Button variant="ghost" size="sm" className="group">
-                <Github className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
-                GitHub
-              </Button>
-              <Button variant="ghost" size="sm" className="group">
-                <Twitter className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
-                Twitter
-              </Button>
-              <Button variant="ghost" size="sm" className="group">
-                <Mail className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
-                Contact
-              </Button>
-            </div>
+            {siteConfig.social && (
+              <div className="flex justify-center lg:justify-start gap-3">
+                {siteConfig.social.github && (
+                  <Button variant="ghost" size="sm" asChild className="group">
+                    <a 
+                      href={siteConfig.social.github} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                    >
+                      <Github className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
+                      GitHub
+                    </a>
+                  </Button>
+                )}
+                {siteConfig.social.twitter && (
+                  <Button variant="ghost" size="sm" asChild className="group">
+                    <a 
+                      href={`https://twitter.com/${siteConfig.social.twitter.replace('@', '')}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                    >
+                      <Twitter className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
+                      Twitter
+                    </a>
+                  </Button>
+                )}
+                {siteConfig.social.email && (
+                  <Button variant="ghost" size="sm" asChild className="group">
+                    <a href={`mailto:${siteConfig.social.email}`}>
+                      <Mail className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
+                      Contact
+                    </a>
+                  </Button>
+                )}
+                {siteConfig.social.linkedin && (
+                  <Button variant="ghost" size="sm" asChild className="group">
+                    <a 
+                      href={siteConfig.social.linkedin} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                    >
+                      <Linkedin className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
+                      LinkedIn
+                    </a>
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Right Column - Recent Posts Preview */}

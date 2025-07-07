@@ -7,6 +7,7 @@ import {
   getBaseUrl,
   truncateForOG
 } from './og-image'
+import { siteConfig, getSiteUrl } from '@/site.config'
 
 export interface MetadataConfig {
   title: string
@@ -25,14 +26,13 @@ export interface MetadataConfig {
  * Generate complete Next.js metadata object with consistent defaults
  */
 export function generateMetadata(config: MetadataConfig): Metadata {
-  const baseUrl = getBaseUrl()
-  const siteName = 'Noxion Blog'
+  const baseUrl = getSiteUrl()
   
   return {
     title: config.title,
     description: config.description,
     keywords: config.keywords,
-    authors: config.authors || [{ name: 'Noxion' }],
+    authors: config.authors || [{ name: siteConfig.author.name }],
     openGraph: {
       title: config.title,
       description: config.description,
@@ -46,7 +46,7 @@ export function generateMetadata(config: MetadataConfig): Metadata {
         }
       ] : undefined,
       url: config.url || baseUrl,
-      siteName,
+      siteName: siteConfig.name,
       ...(config.type === 'article' && {
         publishedTime: config.publishedTime,
         modifiedTime: config.modifiedTime,
@@ -69,12 +69,12 @@ export function generateMetadata(config: MetadataConfig): Metadata {
  * Generate metadata for the homepage
  */
 export function generateHomepageMetadata(): Metadata {
-  const baseUrl = getBaseUrl()
+  const baseUrl = getSiteUrl()
   
   return generateMetadata({
-    title: 'Noxion Blog - Write in Notion, Publish Beautifully',
-    description: 'Transform your Notion pages into a stunning blog. Share your thoughts, stories, and insights with the world.',
-    keywords: ['notion', 'blog', 'writing', 'publishing', 'nextjs'],
+    title: `${siteConfig.name} - Write in Notion, Publish Beautifully`,
+    description: siteConfig.description,
+    keywords: siteConfig.keywords,
     image: generateHomepageOGImageUrl(baseUrl),
     url: baseUrl,
     type: 'website',
@@ -85,10 +85,10 @@ export function generateHomepageMetadata(): Metadata {
  * Generate metadata for the articles listing page
  */
 export function generateArticlesMetadata(): Metadata {
-  const baseUrl = getBaseUrl()
+  const baseUrl = getSiteUrl()
   
   return generateMetadata({
-    title: 'All Articles | Noxion Blog',
+    title: `All Articles | ${siteConfig.name}`,
     description: 'Browse all articles and blog posts from our Notion-powered blog. Discover insights, tutorials, and stories.',
     keywords: ['articles', 'blog posts', 'tutorials', 'insights'],
     image: generateOGImageUrl({
@@ -105,11 +105,11 @@ export function generateArticlesMetadata(): Metadata {
  * Generate metadata for individual blog posts
  */
 export function generatePostMetadata(post: BlogPost): Metadata {
-  const baseUrl = getBaseUrl()
+  const baseUrl = getSiteUrl()
   
   return generateMetadata({
     title: post.title,
-    description: post.summary || `Read ${post.title} on Noxion`,
+    description: post.summary || `Read ${post.title} on ${siteConfig.shortName}`,
     keywords: post.tags,
     image: generatePostOGImageUrl(post, baseUrl),
     url: `${baseUrl}/articles/${post.slug}`,
@@ -124,13 +124,13 @@ export function generatePostMetadata(post: BlogPost): Metadata {
  * Generate metadata for tag pages
  */
 export function generateTagMetadata(tag: string, postCount?: number): Metadata {
-  const baseUrl = getBaseUrl()
+  const baseUrl = getSiteUrl()
   const description = postCount 
     ? `Browse ${postCount} article${postCount === 1 ? '' : 's'} tagged with "${tag}"`
     : `Articles tagged with "${tag}"`
   
   return generateMetadata({
-    title: `#${tag} | Noxion Blog`,
+    title: `#${tag} | ${siteConfig.name}`,
     description,
     keywords: [tag, 'articles', 'blog posts'],
     image: generateOGImageUrl({
@@ -148,15 +148,15 @@ export function generateTagMetadata(tag: string, postCount?: number): Metadata {
  * Generate metadata for error pages
  */
 export function generateErrorMetadata(errorType: 'not-found' | 'error' = 'error'): Metadata {
-  const baseUrl = getBaseUrl()
+  const baseUrl = getSiteUrl()
   
   const config = errorType === 'not-found' 
     ? {
-        title: 'Page Not Found | Noxion Blog',
+        title: `Page Not Found | ${siteConfig.name}`,
         description: 'The page you are looking for could not be found.',
       }
     : {
-        title: 'Something went wrong | Noxion Blog',
+        title: `Something went wrong | ${siteConfig.name}`,
         description: 'An error occurred while loading this page.',
       }
   
@@ -172,14 +172,14 @@ export function generateErrorMetadata(errorType: 'not-found' | 'error' = 'error'
  * Generate metadata for the about page
  */
 export function generateAboutMetadata(): Metadata {
-  const baseUrl = getBaseUrl()
+  const baseUrl = getSiteUrl()
   
   return generateMetadata({
-    title: 'About | Noxion Blog',
-    description: 'Learn more about Noxion Blog, a Notion-powered publishing platform that makes it easy to share your ideas with the world.',
+    title: `About | ${siteConfig.name}`,
+    description: `Learn more about ${siteConfig.name}, a Notion-powered publishing platform that makes it easy to share your ideas with the world.`,
     keywords: ['about', 'notion', 'blog', 'publishing'],
     image: generateOGImageUrl({
-      title: 'About Noxion',
+      title: `About ${siteConfig.shortName}`,
       description: 'Notion-powered blog platform',
       type: 'homepage'
     }, baseUrl),
@@ -206,8 +206,8 @@ export function generateSafeMetadata(
     
     // Ultimate fallback
     return generateMetadata({
-      title: 'Noxion Blog',
-      description: 'Notion-powered blog with insights and tutorials',
+      title: siteConfig.name,
+      description: siteConfig.description,
       image: generateHomepageOGImageUrl(),
       type: 'website',
     })

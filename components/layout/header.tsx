@@ -4,17 +4,33 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ThemeToggle } from '../common/theme-toggle'
 import { ProgressiveBlurBackdrop } from '../common/progressive-blur-backdrop'
-import { Sparkles, Menu, X, Home, FileText, User, BookOpen, List } from 'lucide-react'
+import { Menu, X, Home, FileText, User, BookOpen, List } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
 import { cn } from '@/lib/utils'
 import { useTableOfContents } from '@/hooks/use-table-of-contents'
 import { useScrollProgress } from '@/hooks/use-scroll-progress'
+import { siteConfig } from '@/site.config'
 
-const navItems = [
-  { href: '/', label: 'Home', icon: Home },
-  { href: '/articles', label: 'Articles', icon: FileText },
-  { href: '/about', label: 'About', icon: User },
-]
+// 아이콘 매핑
+const iconMap = {
+  home: Home,
+  articles: FileText,
+  about: User,
+}
+
+// 동적으로 아이콘을 가져오는 함수
+function getNavIcon(href: string) {
+  if (href === '/') return iconMap.home
+  if (href === '/articles') return iconMap.articles
+  if (href === '/about') return iconMap.about
+  return FileText // 기본 아이콘
+}
+
+// 사이트 설정에서 내비게이션 항목 가져오기
+const navItems = siteConfig.navigation.header.map(item => ({
+  ...item,
+  icon: getNavIcon(item.href)
+}))
 
 export function Header() {
   const pathname = usePathname()
@@ -102,19 +118,21 @@ export function Header() {
                   "bg-primary rounded-full shadow-sm group-hover:shadow-md transition-all duration-500",
                   isScrolled ? "p-1.5" : "p-2"
                 )}>
-                  <Sparkles className={cn(
+                  <siteConfig.logo.icon className={cn(
                     "text-white transition-all duration-500",
                     isScrolled ? "h-4 w-4" : "h-5 w-5"
                   )} />
                 </div>
-                <span className={cn(
-                  "font-semibold transition-all duration-500",
-                  isScrolled 
-                    ? "text-sm opacity-0 w-0 overflow-hidden" 
-                    : "text-lg opacity-100 w-auto"
-                )}>
-                  Blog
-                </span>
+                {siteConfig.logo.showText && (
+                  <span className={cn(
+                    "font-semibold transition-all duration-500",
+                    isScrolled 
+                      ? "text-sm opacity-0 w-0 overflow-hidden" 
+                      : "text-lg opacity-100 w-auto"
+                  )}>
+                    {siteConfig.logo.text}
+                  </span>
+                )}
               </Link>
             </div>
             
