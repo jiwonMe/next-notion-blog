@@ -1,0 +1,66 @@
+{
+  "name": "@noxion/core",
+  "version": "0.1.0",
+  "description": "Core functionality for Noxion blog platform",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "clean": "rm -rf dist",
+    "lint": "echo 'No linting for core package'",
+    "lint:fix": "echo 'No linting for core package'",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "noxion",
+    "core",
+    "notion",
+    "blog",
+    "cms"
+  ],
+  "author": "Noxion Team",
+  "license": "MIT",
+  "dependencies": {
+    "@noxion/types": "workspace:*",
+    "@notionhq/client": "^2.2.15",
+    "notion-to-md": "^3.1.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-markdown": "^9.0.1",
+    "rehype-autolink-headings": "^7.1.0",
+    "rehype-highlight": "^7.0.0",
+    "rehype-katex": "^7.0.1",
+    "rehype-slug": "^6.0.0",
+    "remark-gfm": "^4.0.0",
+    "remark-math": "^6.0.0",
+    "katex": "^0.16.22",
+    "highlight.js": "^11.9.0",
+    "date-fns": "^2.30.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.4"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -9,11 +9,17 @@
     "allowJs": true,
     "strict": true,
     "noEmit": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "jsx": "react-jsx"
   },
-  "include": ["packages/*/src/**/*"],
-  "exclude": ["node_modules", "dist", ".next", "apps"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

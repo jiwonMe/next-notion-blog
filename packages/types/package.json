@@ -1,0 +1,42 @@
+{
+  "name": "@noxion/types",
+  "version": "0.1.0",
+  "description": "Shared TypeScript types for Noxion",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "clean": "rm -rf dist",
+    "lint": "echo 'No linting for types package'",
+    "lint:fix": "echo 'No linting for types package'",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "noxion",
+    "types",
+    "typescript"
+  ],
+  "author": "Noxion Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

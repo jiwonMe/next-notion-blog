@@ -24,7 +24,13 @@
       "Bash(mv:*)",
       "Bash(npm run type-check:*)",
       "Bash(npm run lint)",
-      "Bash(npm ls:*)"
+      "Bash(npm ls:*)",
+      "Bash(ls:*)",
+      "Bash(tree:*)",
+      "Bash(pnpm install:*)",
+      "Bash(NEXT_ESLINT_IGNORE=true pnpm run build)",
+      "Bash(sed:*)",
+      "Bash(NEXT_ESLINT_IGNORE=true timeout 300 pnpm run build)"
     ],
     "deny": []
   }
