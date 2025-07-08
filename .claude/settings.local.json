@@ -30,7 +30,8 @@
       "Bash(pnpm install:*)",
       "Bash(NEXT_ESLINT_IGNORE=true pnpm run build)",
       "Bash(sed:*)",
-      "Bash(NEXT_ESLINT_IGNORE=true timeout 300 pnpm run build)"
+      "Bash(NEXT_ESLINT_IGNORE=true timeout 300 pnpm run build)",
+      "Bash(git push:*)"
     ],
     "deny": []
   }
