@@ -31,6 +31,7 @@
     "build": "pnpm -r build",
     "build:packages": "pnpm --filter='./packages/*' build",
     "build:web": "pnpm --filter=noxion-web build",
+    "build:vercel": "pnpm build:packages && pnpm build:web",
     "start": "pnpm --filter=noxion-web start",
     "lint": "pnpm -r lint",
     "lint:fix": "pnpm -r lint:fix",
