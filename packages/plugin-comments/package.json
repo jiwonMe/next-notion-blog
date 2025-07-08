@@ -22,7 +22,8 @@
     "src"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "build": "tsup --format cjs,esm --dts --clean && npm run fix-use-client",
+    "fix-use-client": "sed -i '' '1s/^/\"use client\";\\n/' dist/client.js && sed -i '' '1s/^/\"use client\";\\n/' dist/client.mjs",
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
     "clean": "rm -rf dist",
     "lint": "echo 'No linting for plugin-comments package'",
@@ -41,9 +42,10 @@
     "@noxion/core": "workspace:*",
     "@noxion/types": "workspace:*",
     "@supabase/supabase-js": "^2.39.0",
+    "date-fns": "^2.30.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "date-fns": "^2.30.0"
+    "sonner": "^2.0.6"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",

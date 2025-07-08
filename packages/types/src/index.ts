@@ -43,6 +43,12 @@ export interface BlogPost {
   content?: string
   lastEditedTime: string
   readingTime?: number
+  description?: string
+  author?: string
+  createdAt?: string
+  updatedAt?: string
+  seo?: any
+  listSeo?: any
 }
 
 export interface NotionBlock {
@@ -91,7 +97,19 @@ export interface NoxionCoreContext {
 export interface NoxionPlugin {
   name: string
   version: string
+  description?: string
+  author?: string
   register: (core: NoxionCoreContext) => void | Promise<void>
+  dependencies?: string[]
+  config?: Record<string, any>
+}
+
+// Serializable version without register function (for API/client use)
+export interface SerializablePlugin {
+  name: string
+  version: string
+  description?: string
+  author?: string
   dependencies?: string[]
   config?: Record<string, any>
 }

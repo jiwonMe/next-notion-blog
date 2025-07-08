@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { format } from 'date-fns'
 import { Comment, CommentFormData } from '@noxion/types'
 import { SupabaseCommentsAPI } from '../api/supabase'
+import { toast } from 'sonner'
 
 interface CommentsSectionProps {
   postSlug: string
@@ -197,9 +198,15 @@ export function CommentsSection({ postSlug, supabaseUrl, supabaseKey, className 
         setComments(response.comments)
       } else {
         setError(response.error || 'Failed to load comments')
+        toast.error('Failed to load comments', {
+          description: response.error || 'Please try refreshing the page'
+        })
       }
     } catch (err) {
       setError('Failed to load comments')
+      toast.error('Failed to load comments', {
+        description: 'Network error occurred while loading comments'
+      })
     } finally {
       setLoading(false)
     }
@@ -212,15 +219,33 @@ export function CommentsSection({ postSlug, supabaseUrl, supabaseKey, className 
     try {
       const response = await api.createComment(data)
       if (response.success) {
-        // Show success message
-        setError('Comment submitted successfully! It will appear after approval.')
+        // Show success toast
+        if (data.parentId) {
+          toast.success('Reply submitted successfully!', {
+            description: 'Your reply will appear after approval'
+          })
+        } else {
+          toast.success('Comment submitted successfully!', {
+            description: 'Your comment will appear after approval'
+          })
+        }
+        
+        // Clear any reply state
+        setReplyingTo(null)
+        
         // Optionally reload comments to show the new comment if it's auto-approved
         await loadComments()
       } else {
         setError(response.error || 'Failed to submit comment')
+        toast.error('Failed to submit comment', {
+          description: response.error || 'Please check your input and try again'
+        })
       }
     } catch (err) {
       setError('Failed to submit comment')
+      toast.error('Failed to submit comment', {
+        description: 'Network error occurred while submitting'
+      })
     } finally {
       setIsSubmitting(false)
     }

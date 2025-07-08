@@ -1,0 +1,123 @@
+import { NoxionPlugin, BlogPost } from '@noxion/types'
+
+export interface AnalyticsConfig {
+  trackingId: string
+  enablePageViews: boolean
+  enableEvents: boolean
+  debugMode: boolean
+  customDimensions?: Record<string, string>
+  enableEcommerce?: boolean
+}
+
+export const createAnalyticsPlugin = (config: Partial<AnalyticsConfig> = {}): NoxionPlugin => {
+  const defaultConfig: AnalyticsConfig = {
+    trackingId: 'GA-DEMO-123',
+    enablePageViews: true,
+    enableEvents: false,
+    debugMode: false,
+    customDimensions: {},
+    enableEcommerce: false,
+    ...config
+  }
+
+  return {
+    name: 'analytics',
+    version: '1.0.0',
+    description: 'Advanced analytics and tracking plugin for blog posts and user interactions',
+    author: 'Noxion Team',
+    config: defaultConfig,
+    
+    async register(context) {
+      if (typeof console !== 'undefined') {
+        console.log('Registering Analytics Plugin with config:', defaultConfig)
+      }
+      
+      // Register page view tracking hook
+      context.registerHook('afterPostRender', async (post: BlogPost) => {
+        if (defaultConfig.enablePageViews) {
+          await trackPageView(post, defaultConfig)
+        }
+        return post
+      })
+      
+      // Register posts list tracking hook
+      context.registerHook('afterPostsQuery', async (posts: BlogPost[]) => {
+        if (defaultConfig.debugMode && typeof console !== 'undefined') {
+          console.log('Analytics: Posts list queried', posts.length, 'posts')
+        }
+        return posts
+      })
+      
+      // Register analytics script component
+      context.registerComponent('AnalyticsScript', createAnalyticsScriptComponent(defaultConfig))
+      
+      // Register analytics dashboard component
+      context.registerComponent('AnalyticsDashboard', createAnalyticsDashboardComponent(defaultConfig))
+    }
+  }
+}
+
+async function trackPageView(post: BlogPost, config: AnalyticsConfig): Promise<void> {
+  if (config.debugMode && typeof console !== 'undefined') {
+    console.log('Analytics: Page view tracked for', post.slug, {
+      title: post.title,
+      trackingId: config.trackingId,
+      customDimensions: config.customDimensions
+    })
+  }
+  
+  // In a real implementation, this would send data to your analytics service
+  // For example: Google Analytics, Plausible, etc.
+}
+
+function createAnalyticsScriptComponent(config: AnalyticsConfig): any {
+  return function AnalyticsScript() {
+    if (typeof window === 'undefined') return null
+    
+    return {
+      type: 'script',
+      props: {
+        id: 'analytics-script',
+        dangerouslySetInnerHTML: {
+          __html: `
+            if (typeof console !== 'undefined') {
+              console.log('Analytics script loaded with tracking ID: ${config.trackingId}');
+            }
+            // Analytics initialization code would go here
+          `
+        }
+      }
+    }
+  }
+}
+
+function createAnalyticsDashboardComponent(config: AnalyticsConfig): any {
+  return function AnalyticsDashboard() {
+    return {
+      type: 'div',
+      props: {
+        className: 'analytics-dashboard p-4 border rounded',
+        children: [
+          {
+            type: 'h3',
+            props: { children: 'Analytics Dashboard' }
+          },
+          {
+            type: 'p',
+            props: { children: `Tracking ID: ${config.trackingId}` }
+          },
+          {
+            type: 'p',
+            props: { children: `Page Views: ${config.enablePageViews ? 'Enabled' : 'Disabled'}` }
+          },
+          {
+            type: 'p',
+            props: { children: `Events: ${config.enableEvents ? 'Enabled' : 'Disabled'}` }
+          }
+        ]
+      }
+    }
+  }
+}
+
+export default createAnalyticsPlugin

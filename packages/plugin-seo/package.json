@@ -1,0 +1,42 @@
+{
+  "name": "@noxion/plugin-seo",
+  "version": "2.1.0",
+  "description": "SEO optimization plugin for Noxion blog platform",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "noxion",
+    "plugin",
+    "seo",
+    "blog",
+    "optimization",
+    "meta-tags",
+    "open-graph"
+  ],
+  "author": "Noxion Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@noxion/types": "workspace:*",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "@noxion/types": "workspace:*"
+  },
+  "dependencies": {
+    "@noxion/plugin-analytics": "workspace:*"
+  }
+}

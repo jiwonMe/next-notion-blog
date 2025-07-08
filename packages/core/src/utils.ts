@@ -31,6 +31,12 @@ export function validateEnvironment(): {
   token: string
   databaseId: string
 } {
+  // Only validate on server side
+  if (typeof window !== 'undefined') {
+    // Return empty values for client side
+    return { token: '', databaseId: '' }
+  }
+
   const token = process.env.NOTION_TOKEN
   const databaseId = process.env.NOTION_DATABASE_ID
 

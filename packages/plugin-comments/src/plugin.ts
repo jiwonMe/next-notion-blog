@@ -15,8 +15,10 @@ export function createCommentsPlugin(config: CommentsPluginConfig): NoxionPlugin
     config,
     
     register: (core: NoxionCoreContext) => {
-      // Register the comments component with import path for dynamic loading
-      core.registerComponent('CommentsSection', '@noxion/plugin-comments/client' as any)
+      // Register the comments component with lazy loading function
+      core.registerComponent('CommentsSection', () => {
+        return import('@noxion/plugin-comments/client').then(mod => mod.CommentsSection)
+      })
       
       // Register API routes
       const apiRoutes = new CommentsAPIRoutes(config.supabaseUrl, config.supabaseKey)

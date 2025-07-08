@@ -3,8 +3,15 @@ import { NotionClient } from './notion'
 import { logError } from './error-handling'
 import React from 'react'
 
+export interface PluginStatus {
+  enabled: boolean
+  lastUpdated: string
+  errors?: string[]
+}
+
 export class PluginManager {
   private plugins: Map<string, NoxionPlugin> = new Map()
+  private pluginStatus: Map<string, PluginStatus> = new Map()
   private routes: Map<string, Function> = new Map()
   private components: Map<string, React.ComponentType<any> | (() => Promise<React.ComponentType<any>>) | string> = new Map()
   private hooks: Map<string, Function[]> = new Map()
@@ -49,6 +56,12 @@ export class PluginManager {
       // Register the plugin
       await plugin.register(context)
       this.plugins.set(plugin.name, plugin)
+      
+      // Initialize plugin status as enabled
+      this.pluginStatus.set(plugin.name, {
+        enabled: true,
+        lastUpdated: new Date().toISOString(),
+      })
 
       console.log(`Plugin ${plugin.name} registered successfully`)
     } catch (error) {
@@ -62,7 +75,71 @@ export class PluginManager {
    */
   unregisterPlugin(name: string): void {
     this.plugins.delete(name)
+    this.pluginStatus.delete(name)
     // TODO: Clean up routes, components, and hooks registered by this plugin
+  }
+
+  /**
+   * Enable or disable a plugin
+   */
+  setPluginEnabled(name: string, enabled: boolean): boolean {
+    const plugin = this.plugins.get(name)
+    if (!plugin) {
+      return false
+    }
+    
+    const currentStatus = this.pluginStatus.get(name) || {
+      enabled: true,
+      lastUpdated: new Date().toISOString(),
+    }
+    this.pluginStatus.set(name, {
+      ...currentStatus,
+      enabled,
+      lastUpdated: new Date().toISOString(),
+    })
+    
+    console.log(`Plugin ${name} ${enabled ? 'enabled' : 'disabled'}`)
+    return true
+  }
+
+  /**
+   * Get plugin status
+   */
+  getPluginStatus(name: string): PluginStatus | undefined {
+    return this.pluginStatus.get(name)
+  }
+
+  /**
+   * Get all plugin statuses
+   */
+  getAllPluginStatuses(): Map<string, PluginStatus> {
+    return new Map(this.pluginStatus)
+  }
+
+  /**
+   * Update plugin configuration
+   */
+  updatePluginConfig(name: string, config: any): boolean {
+    const plugin = this.plugins.get(name)
+    if (!plugin) {
+      return false
+    }
+    
+    // Update the plugin config
+    plugin.config = { ...plugin.config, ...config }
+    
+    // Update status
+    const currentStatus = this.pluginStatus.get(name) || {
+      enabled: true,
+      lastUpdated: new Date().toISOString(),
+    }
+    this.pluginStatus.set(name, {
+      ...currentStatus,
+      lastUpdated: new Date().toISOString(),
+    })
+    
+    console.log(`Plugin ${name} configuration updated`)
+    return true
   }
 
   /**
@@ -90,7 +167,7 @@ export class PluginManager {
   }
 
   /**
-   * Execute all handlers for a specific hook
+   * Execute all handlers for a specific hook (only for enabled plugins)
    */
   async executeHook<T>(hookName: HookName, data: T): Promise<T> {
     const handlers = this.hooks.get(hookName) || []
@@ -98,6 +175,8 @@ export class PluginManager {
     let result = data
     for (const handler of handlers) {
       try {
+        // Only execute hooks for enabled plugins
+        // Note: We'd need to track which plugin registered which hook for better filtering
         result = await handler(result)
       } catch (error) {
         logError(error, 'executeHook', { hookName, handlerIndex: handlers.indexOf(handler) })

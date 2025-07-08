@@ -3,7 +3,7 @@ export type * from '@noxion/types'
 
 // Core classes
 export { NotionClient } from './notion'
-export { PluginManager } from './plugin-manager'
+export { PluginManager, type PluginStatus } from './plugin-manager'
 
 // Error handling
 export * from './error-handling'

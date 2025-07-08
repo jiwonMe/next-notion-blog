@@ -9,5 +9,5 @@ export default defineConfig({
   treeshake: true,
   splitting: false,
   minify: false,
-  external: ['react', 'react-dom', 'next/server', 'next']
+  external: ['react', 'react-dom', 'next/server', 'next', '@noxion/plugin-comments/client', 'sonner']
 })

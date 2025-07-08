@@ -4,6 +4,7 @@ import { ThemeProvider, ErrorBoundary } from '@/components/common'
 import { Header } from '@/components/layout'
 import { Footer } from '@/components/layout'
 import { getMetadataBase } from '@/site.config'
+import { Toaster } from 'sonner'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -29,6 +30,12 @@ export default function RootLayout({
               <main className="flex-1">{children}</main>
               <Footer />
             </div>
+            <Toaster 
+              position="top-right"
+              richColors
+              closeButton
+              duration={4000}
+            />
           </ErrorBoundary>
         </ThemeProvider>
       </body>

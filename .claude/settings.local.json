@@ -31,7 +31,13 @@
       "Bash(NEXT_ESLINT_IGNORE=true pnpm run build)",
       "Bash(sed:*)",
       "Bash(NEXT_ESLINT_IGNORE=true timeout 300 pnpm run build)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(pnpm --filter @noxion/core build)",
+      "Bash(pnpm --filter @noxion/plugin-analytics build)",
+      "Bash(pnpm --filter @noxion/types build)",
+      "Bash(pnpm --filter @noxion/plugin-seo build)",
+      "Bash(pnpm:*)",
+      "Bash(timeout 60 npm run build)"
     ],
     "deny": []
   }
