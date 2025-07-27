@@ -55,7 +55,7 @@ export function createCommentsPlugin(config: CommentsPluginConfig): NoxionPlugin
         }
       })
       
-      console.log('Comments plugin registered successfully')
+      // Comments plugin registered successfully
     }
   }
 }

@@ -63,7 +63,7 @@ export class PluginManager {
         lastUpdated: new Date().toISOString(),
       })
 
-      console.log(`Plugin ${plugin.name} registered successfully`)
+      // Plugin registered successfully
     } catch (error) {
       logError(error, 'registerPlugin', { pluginName: plugin.name })
       throw error
@@ -98,7 +98,7 @@ export class PluginManager {
       lastUpdated: new Date().toISOString(),
     })
     
-    console.log(`Plugin ${name} ${enabled ? 'enabled' : 'disabled'}`)
+    // Plugin state updated
     return true
   }
 
@@ -138,7 +138,7 @@ export class PluginManager {
       lastUpdated: new Date().toISOString(),
     })
     
-    console.log(`Plugin ${name} configuration updated`)
+    // Plugin configuration updated
     return true
   }
 

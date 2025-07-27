@@ -37,14 +37,14 @@ export const createSEOPlugin = (config: Partial<SEOConfig> = {}): NoxionPlugin =
     config: defaultConfig,
     
     async register(context) {
-      console.log('Registering SEO Plugin with config:', defaultConfig)
+      // Registering SEO Plugin
       
       // Hook into post rendering to add SEO metadata
       context.registerHook('afterPostRender', async (post: BlogPost) => {
         const enhancedPost = await enhancePostWithSEO(post, defaultConfig)
         
         if (defaultConfig.generateMetaTags) {
-          console.log('SEO: Meta tags generated for', post.slug)
+          // SEO: Meta tags generated
         }
         
         return enhancedPost
@@ -56,7 +56,7 @@ export const createSEOPlugin = (config: Partial<SEOConfig> = {}): NoxionPlugin =
       })
       
       // Register SEO components
-      context.registerComponent('SEOHead', createSEOHeadComponent(defaultConfig))
+      context.registerComponent('SEOHead', createSEOMetadata(defaultConfig))
       
       context.registerComponent('StructuredData', createStructuredDataComponent(defaultConfig))
       
@@ -139,59 +139,53 @@ function extractKeywords(post: BlogPost): string[] {
     .map(([word]) => word)
 }
 
-function createSEOHeadComponent(config: SEOConfig): any {
-  return function SEOHead({ post }: { post?: BlogPost }) {
-    if (!post?.seo) return null
+function createSEOMetadata(config: SEOConfig) {
+  return function generateSEOMetadata(post?: BlogPost) {
+    if (!post?.seo) return {}
     
     const { seo } = post
-    const metaTags = []
+    const metadata: any = {
+      title: seo.title,
+      description: seo.description,
+    }
     
     if (config.generateMetaTags) {
-      metaTags.push(
-        { name: 'description', content: seo.description },
-        { name: 'keywords', content: seo.keywords.join(', ') },
-        { name: 'author', content: seo.author }
-      )
+      metadata.keywords = seo.keywords
+      metadata.authors = [{ name: seo.author }]
     }
     
     if (config.enableOpenGraph) {
-      metaTags.push(
-        { property: 'og:title', content: seo.title },
-        { property: 'og:description', content: seo.description },
-        { property: 'og:image', content: seo.image },
-        { property: 'og:url', content: seo.url },
-        { property: 'og:type', content: 'article' },
-        { property: 'og:site_name', content: config.siteName }
-      )
+      metadata.openGraph = {
+        title: seo.title,
+        description: seo.description,
+        images: seo.image ? [seo.image] : [],
+        url: seo.url,
+        type: 'article',
+        siteName: config.siteName,
+        publishedTime: seo.publishedTime,
+        modifiedTime: seo.modifiedTime,
+      }
       
       if (config.facebookAppId) {
-        metaTags.push({ property: 'fb:app_id', content: config.facebookAppId })
+        metadata.openGraph.appId = config.facebookAppId
       }
     }
     
     if (config.enableTwitterCards) {
-      metaTags.push(
-        { name: 'twitter:card', content: 'summary_large_image' },
-        { name: 'twitter:title', content: seo.title },
-        { name: 'twitter:description', content: seo.description },
-        { name: 'twitter:image', content: seo.image }
-      )
+      metadata.twitter = {
+        card: 'summary_large_image',
+        title: seo.title,
+        description: seo.description,
+        images: seo.image ? [seo.image] : [],
+      }
       
       if (config.twitterHandle) {
-        metaTags.push({ name: 'twitter:site', content: config.twitterHandle })
+        metadata.twitter.site = config.twitterHandle
+        metadata.twitter.creator = config.twitterHandle
       }
     }
     
-    return {
-      type: 'head',
-      props: {
-        children: metaTags.map((tag, index) => ({
-          type: 'meta',
-          key: index,
-          props: tag
-        }))
-      }
-    }
+    return metadata
   }
 }
 

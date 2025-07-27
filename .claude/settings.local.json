@@ -37,7 +37,10 @@
       "Bash(pnpm --filter @noxion/types build)",
       "Bash(pnpm --filter @noxion/plugin-seo build)",
       "Bash(pnpm:*)",
-      "Bash(timeout 60 npm run build)"
+      "Bash(timeout 60 npm run build)",
+      "Bash(timeout 10 pnpm dev)",
+      "Bash(true)",
+      "Bash(chmod:*)"
     ],
     "deny": []
   }

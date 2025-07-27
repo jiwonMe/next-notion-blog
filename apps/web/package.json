@@ -13,6 +13,7 @@
     "clean": "rm -rf .next"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.24.0",
     "@noxion/core": "workspace:*",
     "@noxion/plugin-analytics": "workspace:^",
     "@noxion/plugin-comments": "workspace:*",
@@ -29,7 +30,9 @@
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-switch": "^1.2.5",
+    "@radix-ui/react-tabs": "^1.1.12",
     "@radix-ui/react-tooltip": "^1.2.7",
+    "@supabase/supabase-js": "^2.39.0",
     "@tailwindcss/typography": "^0.5.13",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -41,6 +44,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "sonner": "^2.0.6",
+    "svix": "^1.69.0",
     "tailwind-merge": "^2.4.0"
   },
   "devDependencies": {

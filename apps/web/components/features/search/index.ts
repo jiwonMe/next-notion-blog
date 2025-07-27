@@ -1,1 +1,0 @@
-export { ArticleSearch } from './article-search'

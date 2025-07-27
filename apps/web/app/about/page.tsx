@@ -1,6 +1,7 @@
-import { generateAboutMetadata } from '@/lib/metadata'
-
-export const metadata = generateAboutMetadata()
+export const metadata = {
+  title: 'About Noxion',
+  description: 'Learn about Noxion, a modern multi-tenant blog platform powered by Notion and Next.js.',
+}
 
 export default function AboutPage() {
   return (
@@ -10,69 +11,72 @@ export default function AboutPage() {
         
         <div className="prose prose-lg max-w-none dark:prose-invert">
           <p className="lead">
-            Noxion is a modern, fast, and beautiful blog platform that bridges the gap 
-            between Notion&apos;s powerful content management capabilities and Next.js&apos;s 
-            performance-focused web framework.
+            Noxion is a multi-tenant blog platform that transforms your Notion workspace 
+            into a beautiful, high-performance blog. Each user gets their own isolated 
+            blog with custom domains, plugins, and complete editorial control.
           </p>
 
           <h2>What makes Noxion special?</h2>
           
           <ul>
             <li>
-              <strong>Notion-powered content:</strong> Write your posts in Notion&apos;s 
-              intuitive interface with rich formatting, databases, and collaborative features.
+              <strong>Multi-tenant architecture:</strong> Each user gets their own blog 
+              with isolated data, custom domains, and independent configuration.
             </li>
             <li>
-              <strong>Next.js performance:</strong> Built on Next.js 14 with App Router 
-              for optimal performance, SEO, and user experience.
+              <strong>Notion integration:</strong> Connect your Notion database to 
+              automatically sync content with beautiful formatting and rich media.
             </li>
             <li>
-              <strong>Modern design:</strong> Clean, responsive design with dark mode 
-              support and beautiful typography.
+              <strong>Plugin ecosystem:</strong> Extend your blog with analytics, 
+              comments, SEO tools, and more. Enable only what you need.
             </li>
             <li>
-              <strong>Developer-friendly:</strong> TypeScript, Tailwind CSS, and 
-              modern development practices.
+              <strong>Next.js performance:</strong> Built on Next.js 14 with optimal 
+              performance, SEO, and user experience.
             </li>
           </ul>
 
           <h2>Features</h2>
           
           <ul>
+            <li>🏢 Multi-tenant SaaS architecture</li>
             <li>📝 Write posts in Notion</li>
+            <li>🔌 Extensible plugin system</li>
+            <li>🌐 Custom domain support</li>
+            <li>📊 Built-in analytics</li>
+            <li>💬 Comment system</li>
+            <li>🔍 SEO optimization</li>
             <li>🎨 Beautiful, responsive design</li>
             <li>🌙 Dark mode support</li>
-            <li>📱 Mobile-first approach</li>
-            <li>⚡ Fast loading with ISR</li>
-            <li>🔍 SEO optimized</li>
-            <li>🏷️ Tag system</li>
-            <li>📊 Reading time estimation</li>
-            <li>🔗 Social sharing</li>
-            <li>♿ Accessibility focused</li>
+            <li>⚡ Lightning fast performance</li>
           </ul>
 
           <h2>Getting Started</h2>
           
           <p>
-            To set up your own Noxion blog, you&apos;ll need:
+            Creating your blog is simple:
           </p>
           
           <ol>
-            <li>A Notion account with a database for your posts</li>
-            <li>A Notion integration token</li>
-            <li>Node.js and npm/yarn installed</li>
-            <li>A deployment platform (Vercel recommended)</li>
+            <li>Sign up with your preferred OAuth provider</li>
+            <li>Create your blog and choose a unique URL</li>
+            <li>Connect your Notion database</li>
+            <li>Install plugins to customize your blog</li>
+            <li>Start writing and publishing!</li>
           </ol>
 
           <p>
-            Check out the README for detailed setup instructions and configuration options.
+            Your blog will be available at yourusername.noxion.dev, or you can 
+            configure a custom domain in your dashboard.
           </p>
 
-          <h2>Open Source</h2>
+          <h2>Built for Scale</h2>
           
           <p>
-            Noxion is open source and available on GitHub. We welcome contributions, 
-            bug reports, and feature requests from the community.
+            Noxion is designed to handle thousands of blogs with enterprise-grade 
+            security, performance, and reliability. Each blog is completely isolated 
+            with its own data, settings, and customizations.
           </p>
         </div>
       </div>

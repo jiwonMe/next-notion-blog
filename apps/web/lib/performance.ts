@@ -1,5 +1,4 @@
 import { BlogPost } from '@noxion/types'
-import { getPosts, getPost } from '@/lib/noxion'
 import { preloadCache, getCacheStats, cleanupExpiredCache } from './cache'
 import { logError } from './error-handling'
 
@@ -109,12 +108,12 @@ function calculateStats(metrics: PerformanceMetrics[]) {
 /**
  * Warm up cache with popular content
  */
-export async function warmupCache(): Promise<void> {
+export async function warmupCache(fetcher: () => Promise<BlogPost[]>): Promise<void> {
   try {
     const startTime = Date.now()
     
-    // Preload posts list
-    await preloadCache(getPosts)
+    // Preload content using provided fetcher
+    await preloadCache(fetcher)
     
     recordMetrics('cache_warmup', Date.now() - startTime, false)
   } catch (error) {
@@ -194,23 +193,17 @@ export async function optimizedDataFetch<T>(
 /**
  * Preload critical content for better perceived performance
  */
-export async function preloadCriticalContent(
-  posts: BlogPost[],
+export async function preloadCriticalContent<T>(
+  operations: Array<() => Promise<T>>,
   priorityCount: number = 5
 ): Promise<void> {
   try {
     const startTime = Date.now()
     
-    // Preload content for the most recent posts
-    const priorityPosts = posts
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      .slice(0, priorityCount)
+    // Limit to priority count
+    const priorityOperations = operations.slice(0, priorityCount)
 
-    const contentOperations = priorityPosts.map(
-      post => () => getPost(post.slug)
-    )
-
-    await optimizedDataFetch(contentOperations, 2)
+    await optimizedDataFetch(priorityOperations, 2)
     
     recordMetrics('preload_content', Date.now() - startTime, false, priorityCount)
   } catch (error) {

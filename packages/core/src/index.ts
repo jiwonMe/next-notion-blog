@@ -4,6 +4,7 @@ export type * from '@noxion/types'
 // Core classes
 export { NotionClient } from './notion'
 export { PluginManager, type PluginStatus } from './plugin-manager'
+export { MultiTenantPluginManager, type BlogConfig, type BlogPluginConfig } from './multi-tenant-plugin-manager'
 
 // Error handling
 export * from './error-handling'

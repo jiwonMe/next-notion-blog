@@ -28,9 +28,7 @@ export const createAnalyticsPlugin = (config: Partial<AnalyticsConfig> = {}): No
     config: defaultConfig,
     
     async register(context) {
-      if (typeof console !== 'undefined') {
-        console.log('Registering Analytics Plugin with config:', defaultConfig)
-      }
+      // Analytics plugin registration
       
       // Register page view tracking hook
       context.registerHook('afterPostRender', async (post: BlogPost) => {
@@ -42,9 +40,7 @@ export const createAnalyticsPlugin = (config: Partial<AnalyticsConfig> = {}): No
       
       // Register posts list tracking hook
       context.registerHook('afterPostsQuery', async (posts: BlogPost[]) => {
-        if (defaultConfig.debugMode && typeof console !== 'undefined') {
-          console.log('Analytics: Posts list queried', posts.length, 'posts')
-        }
+        // Analytics: Posts list queried
         return posts
       })
       
@@ -58,13 +54,7 @@ export const createAnalyticsPlugin = (config: Partial<AnalyticsConfig> = {}): No
 }
 
 async function trackPageView(post: BlogPost, config: AnalyticsConfig): Promise<void> {
-  if (config.debugMode && typeof console !== 'undefined') {
-    console.log('Analytics: Page view tracked for', post.slug, {
-      title: post.title,
-      trackingId: config.trackingId,
-      customDimensions: config.customDimensions
-    })
-  }
+  // Analytics: Page view tracked for post
   
   // In a real implementation, this would send data to your analytics service
   // For example: Google Analytics, Plausible, etc.
@@ -80,9 +70,7 @@ function createAnalyticsScriptComponent(config: AnalyticsConfig): any {
         id: 'analytics-script',
         dangerouslySetInnerHTML: {
           __html: `
-            if (typeof console !== 'undefined') {
-              console.log('Analytics script loaded with tracking ID: ${config.trackingId}');
-            }
+            // Analytics script initialized
             // Analytics initialization code would go here
           `
         }
